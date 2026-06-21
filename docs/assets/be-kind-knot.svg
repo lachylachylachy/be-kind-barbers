@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none">
+  <defs>
+    <linearGradient id="silver" x1="40" y1="30" x2="200" y2="210" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f4f5f7"/>
+      <stop offset="0.45" stop-color="#c2c6cc"/>
+      <stop offset="0.75" stop-color="#9aa0a8"/>
+      <stop offset="1" stop-color="#6f757d"/>
+    </linearGradient>
+  </defs>
+  <g transform="rotate(45 120 120)" stroke="url(#silver)" stroke-width="14" stroke-linejoin="round">
+    <!-- two horizontal loops -->
+    <rect x="44"  y="70"  width="152" height="40" rx="8"/>
+    <rect x="44"  y="130" width="152" height="40" rx="8"/>
+    <!-- two vertical loops -->
+    <rect x="70"  y="44"  width="40"  height="152" rx="8"/>
+    <rect x="130" y="44"  width="40"  height="152" rx="8"/>
+  </g>
+</svg>
