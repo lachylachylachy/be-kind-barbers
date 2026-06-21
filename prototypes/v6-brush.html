@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!--
+  CONCEPT: Brush
+  OBJECT: A shaving brush — turned handle built with LatheGeometry (elegant
+          bulbous profile) topped by an ivory bristle dome (hemisphere + fill
+          cone). Walnut handle + soft ivory bristles. MeshPhongMaterial.
+  COLOUR STRATEGY: Committed sage. A calm eucalyptus green carries the surface;
+          ivory + walnut warm it. Spa-quiet, the opposite of the dark batch.
+  PALETTE: #2F3A30 deep sage · #ECE7D9 warm ivory text · #C9A86A wheat CTA
+-->
+<title>Be Kind Barbers — Wellington</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Outfit:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--a:#C9A86A;--a2:#B0904F;--v:#2F3A30;--v2:#263027;--l:#ECE7D9;--d:#9DAB97;--ln:rgba(236,231,217,.12);--lh:rgba(236,231,217,.2)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--v);color:var(--l);font-family:'Outfit',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+#bg{position:fixed;inset:0;z-index:1;pointer-events:none}
+header{position:fixed;inset:0 0 auto;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:env(safe-area-inset-top,18px) clamp(20px,6vw,48px) 18px}
+.brand{font-weight:700;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--d)}.brand b{color:var(--a)}
+.tl{font-size:.68rem;font-weight:500;color:var(--d);border-bottom:1px solid var(--lh);padding-bottom:2px;transition:color .18s}
+@media(hover:hover) and (pointer:fine){.tl:hover{color:var(--l)}}
+.tl:focus-visible{outline:2px solid var(--a);outline-offset:3px}
+main{position:relative;z-index:10}
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 clamp(20px,6vw,48px) clamp(40px,7vh,72px)}
+.hero-text{text-align:center;max-width:600px;margin:0 auto;width:100%}
+.hero-head{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2.2rem,7.5vw,4.6rem);letter-spacing:-.025em;line-height:.98;text-wrap:balance;margin-bottom:28px}
+.hero-head em{font-style:italic;font-weight:500;color:var(--a)}
+.cta{display:inline-flex;align-items:center;gap:12px;font-weight:700;font-size:clamp(.9rem,3vw,1rem);color:var(--v);background:var(--a);padding:15px 34px;border-radius:999px;min-height:54px;border:none;cursor:pointer;transition:background .2s cubic-bezier(.23,1,.32,1),transform .16s cubic-bezier(.23,1,.32,1)}
+.pip{width:22px;height:22px;border-radius:50%;background:rgba(47,58,48,.2);display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;transition:transform .2s cubic-bezier(.23,1,.32,1)}
+@media(hover:hover) and (pointer:fine){.cta:hover{background:var(--a2)}.cta:hover .pip{transform:translateY(3px)}}
+.cta:active{transform:scale(.97)}.cta:focus-visible{outline:2px solid var(--a);outline-offset:4px}
+.meta{margin-top:18px;display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+.meta span,.meta a{font-size:.72rem;color:var(--d)}.meta a{border-bottom:1px solid var(--lh);padding-bottom:1px}
+.meta a:focus-visible{outline:2px solid var(--a);outline-offset:2px}
+.panel{background:rgba(38,48,39,.92);backdrop-filter:blur(6px);border-top:1px solid var(--ln)}
+.hs{padding:20px clamp(20px,6vw,48px)}.hr-row{display:flex;justify-content:center;gap:clamp(16px,4vw,48px);flex-wrap:wrap;max-width:600px;margin:0 auto}
+.hr{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:52px}
+.hd{font-size:.58rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--d);opacity:.85}
+.ht{font-size:.82rem;font-weight:600}.hc{opacity:.45;font-weight:400}
+.svc-sec{padding:clamp(40px,8vw,64px) clamp(20px,6vw,48px);max-width:500px;margin:0 auto;width:100%}
+.svc-list{list-style:none}.svc-item{display:flex;justify-content:space-between;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--ln);gap:16px}
+.svc-item:first-child{border-top:1px solid var(--ln)}.sn{font-size:.92rem}.sp{font-family:'Fraunces',serif;font-size:.95rem;font-weight:600;color:var(--a);white-space:nowrap}
+.book{padding:clamp(48px,10vw,80px) clamp(20px,6vw,48px)}
+.bt{text-align:center;margin-bottom:28px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.bl{font-size:.62rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--d);opacity:.8}
+.bc{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center}
+.ws{max-width:720px;margin:28px auto 0;background:rgba(236,231,217,.05);border:1px solid var(--lh);border-radius:10px;padding:4px}
+.wc{background:#1F271F;border-radius:7px;overflow:hidden;min-height:480px}.wc iframe{width:100%;height:480px;border:none;display:block}
+footer{padding:22px clamp(20px,6vw,48px);padding-bottom:max(22px,env(safe-area-inset-bottom,22px));display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.fc{font-size:.62rem;color:var(--d);opacity:.7}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<header id="hdr" role="banner">
+  <span class="brand">Be <b>Kind</b> Barbers</span>
+  <a href="https://YOURSHOP.gettimely.com/book" target="_blank" rel="noopener" class="tl">Book on Timely ↗</a>
+</header>
+<main>
+  <section class="hero" aria-label="Hero">
+    <div class="hero-text">
+      <h1 class="hero-head">The <em>ritual</em>, not just the cut.</h1>
+      <a href="#book" class="cta">Book Now <span class="pip" aria-hidden="true">↓</span></a>
+      <div class="meta">
+        <span>123 Cuba St, Wellington</span><span aria-hidden="true">·</span>
+        <a href="tel:+6404XXXXXXX">04 XXX XXXX</a><span aria-hidden="true">·</span>
+        <a href="https://maps.google.com/?q=Cuba+Street+Wellington" target="_blank" rel="noopener">Maps ↗</a>
+      </div>
+    </div>
+  </section>
+  <div class="panel hs" role="region" aria-label="Opening hours">
+    <div class="hr-row">
+      <div class="hr"><span class="hd">Mon</span><span class="ht hc">Closed</span></div>
+      <div class="hr"><span class="hd">Tue–Fri</span><span class="ht">9–7</span></div>
+      <div class="hr"><span class="hd">Sat</span><span class="ht">8–6</span></div>
+      <div class="hr"><span class="hd">Sun</span><span class="ht">10–4</span></div>
+    </div>
+  </div>
+  <div class="panel">
+    <section class="svc-sec" aria-label="Services and prices">
+      <ul class="svc-list">
+        <li class="svc-item"><span class="sn">Haircut</span><span class="sp">$45</span></li>
+        <li class="svc-item"><span class="sn">Skin Fade</span><span class="sp">$50</span></li>
+        <li class="svc-item"><span class="sn">Haircut + Beard</span><span class="sp">$65</span></li>
+        <li class="svc-item"><span class="sn">Beard Trim</span><span class="sp">$35</span></li>
+        <li class="svc-item"><span class="sn">Kids Cut</span><span class="sp">$30</span></li>
+        <li class="svc-item"><span class="sn">Hot Towel Shave</span><span class="sp">$50</span></li>
+      </ul>
+    </section>
+  </div>
+  <div class="panel">
+    <section class="book" id="book" aria-labelledby="blbl">
+      <div class="bt">
+        <p class="bl" id="blbl">Choose your time</p>
+        <div class="bc">
+          <a href="#book" class="cta">Book Now <span class="pip" aria-hidden="true">↓</span></a>
+          <a href="https://YOURSHOP.gettimely.com/book" target="_blank" rel="noopener" class="tl">Book on Timely ↗</a>
+        </div>
+      </div>
+      <div class="ws"><div class="wc">
+        <iframe loading="lazy" src="https://YOURSHOP.gettimely.com/book/embed" title="Book at Be Kind Barbers" allow="payment"></iframe>
+      </div></div>
+    </section>
+  </div>
+  <footer class="panel">
+    <span class="fc">© 2025 Be Kind Barbers</span>
+    <a href="https://YOURSHOP.gettimely.com/book" target="_blank" rel="noopener" class="tl">Book on Timely ↗</a>
+  </footer>
+</main>
+<script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+<script>
+(function () {
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const canvas = document.getElementById('bg');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setClearColor(0x2F3A30, 1);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(44, innerWidth / innerHeight, 0.1, 100);
+  camera.position.set(0, 0.2, 5.2);
+  camera.lookAt(0, 0, 0);
+
+  scene.add(new THREE.AmbientLight(0x445046, 7));
+  [
+    { c: 0xFFF6E0, i: 8, p: [4, 6, 6] },
+    { c: 0xE8D8B0, i: 5, p: [-5, 3, 5] },
+    { c: 0xFFFFFF, i: 4, p: [0, -3, 5] },
+    { c: 0xC9D0BE, i: 3, p: [0, 5, -3] },
+  ].forEach(({ c, i, p }) => { const l = new THREE.PointLight(c, i, 30); l.position.set(...p); scene.add(l); });
+
+  const group = new THREE.Group();
+
+  /* Walnut turned handle via LatheGeometry */
+  const pts = [
+    [0.04, -1.55],[0.34,-1.5],[0.5,-1.25],[0.46,-0.85],
+    [0.3,-0.45],[0.28,-0.1],[0.34,0.18],[0.46,0.4],[0.55,0.55]
+  ].map(([x, y]) => new THREE.Vector2(x, y));
+  const handleGeo = new THREE.LatheGeometry(pts, 48);
+  const walnut = new THREE.MeshPhongMaterial({ color: 0x5A3318, specular: 0xB07840, shininess: 90, side: THREE.DoubleSide });
+  group.add(new THREE.Mesh(handleGeo, walnut));
+
+  /* Brass collar ring where bristles meet handle */
+  const collarGeo = new THREE.CylinderGeometry(0.56, 0.5, 0.16, 48);
+  const collar = new THREE.Mesh(collarGeo, new THREE.MeshPhongMaterial({ color: 0xC9A86A, specular: 0xFFE8B0, shininess: 150 }));
+  collar.position.y = 0.6;
+  group.add(collar);
+
+  /* Ivory bristle dome — hemisphere + fill cone for density */
+  const ivory = new THREE.MeshPhongMaterial({ color: 0xEDE3CB, specular: 0xFFFBEE, shininess: 24 });
+  const domeGeo = new THREE.SphereGeometry(0.62, 40, 28, 0, Math.PI * 2, 0, Math.PI * 0.55);
+  const dome = new THREE.Mesh(domeGeo, ivory);
+  dome.position.y = 0.66;
+  group.add(dome);
+  const fillGeo = new THREE.CylinderGeometry(0.6, 0.5, 0.4, 40);
+  const fill = new THREE.Mesh(fillGeo, ivory);
+  fill.position.y = 0.78;
+  group.add(fill);
+
+  group.rotation.x = 0.1;
+  scene.add(group);
+
+  const hdr = document.getElementById('hdr');
+  let scrollY = 0, target = 0, current = 0;
+  window.addEventListener('scroll', () => {
+    scrollY = window.scrollY;
+    const past = scrollY > 60;
+    if (hdr) { hdr.style.background = past ? 'rgba(38,48,39,.9)' : ''; hdr.style.backdropFilter = past ? 'blur(12px)' : ''; hdr.style.borderBottom = past ? '1px solid rgba(236,231,217,.1)' : ''; }
+  }, { passive: true });
+  window.addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    if (!prefersReduced) {
+      const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+      target = (scrollY / max) * Math.PI * 2;
+      current += (target - current) * 0.09;
+      group.rotation.y = current;
+    }
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!--
+  CONCEPT: Razor
+  OBJECT: Straight / cut-throat razor — partially open (blade ~50° from handle).
+          Blade: thin elongated BoxGeometry, chrome MeshStandardMaterial.
+          Handle: slightly wider box, dark tortoiseshell material.
+          A thin edge strip of brighter chrome sits along the cutting edge.
+          The pivot hinge is a small CylinderGeometry pin.
+  SCROLL: Group rotateY 0 → 2π. Lerp 0.1.
+  PALETTE: #060608 cool void · #EDEAE3 light · #B8B8C0 chrome silver CTA
+  TYPE: Outfit 800 / 400
+-->
+<title>Be Kind Barbers — Wellington</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --accent: #A8A8B8;
+  --void:   #060608;
+  --light:  #EDEAE3;
+  --dim:    #7A7670;
+  --line:   rgba(237,234,227,.09);
+  --line-hi:rgba(237,234,227,.15);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  background: var(--void);
+  color: var(--light);
+  font-family: 'Outfit', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+#bg { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+header {
+  position: fixed; inset: 0 0 auto; z-index: 30;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: env(safe-area-inset-top, 18px) clamp(20px,6vw,48px) 18px;
+}
+.brand { font-weight: 700; font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); }
+.brand b { color: var(--accent); }
+.tl { font-size: .68rem; font-weight: 500; color: var(--dim); border-bottom: 1px solid var(--line-hi); padding-bottom: 2px; transition: color .18s; }
+@media (hover: hover) and (pointer: fine) { .tl:hover { color: var(--light); } }
+.tl:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+main { position: relative; z-index: 10; }
+.hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 clamp(20px,6vw,48px) clamp(40px,7vh,72px); }
+.hero-text { text-align: center; max-width: 560px; margin: 0 auto; width: 100%; }
+.hero-head { font-weight: 800; font-size: clamp(2rem,7vw,4.2rem); letter-spacing: -0.04em; line-height: .93; text-wrap: balance; margin-bottom: 28px; }
+.book-cta {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-weight: 700; font-size: clamp(.9rem,3vw,1rem);
+  color: var(--void); background: var(--accent);
+  padding: 15px 34px; border-radius: 999px; min-height: 54px;
+  border: none; cursor: pointer;
+  transition: background .2s cubic-bezier(.23,1,.32,1), transform .16s cubic-bezier(.23,1,.32,1);
+}
+.pip { width: 22px; height: 22px; border-radius: 50%; background: rgba(6,6,8,.16); display: flex; align-items: center; justify-content: center; font-size: .85rem; flex-shrink: 0; transition: transform .2s cubic-bezier(.23,1,.32,1); }
+@media (hover: hover) and (pointer: fine) { .book-cta:hover { background: #8888A0; } .book-cta:hover .pip { transform: translateY(3px); } }
+.book-cta:active { transform: scale(.97); }
+.book-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.hero-meta { margin-top: 18px; display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.hero-meta span, .hero-meta a { font-size: .7rem; color: var(--dim); }
+.hero-meta a { border-bottom: 1px solid var(--line-hi); padding-bottom: 1px; }
+.hero-meta a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.panel { background: rgba(6,6,8,.94); backdrop-filter: blur(6px); border-top: 1px solid var(--line); }
+.hours-strip { padding: 20px clamp(20px,6vw,48px); }
+.hours-row { display: flex; justify-content: center; gap: clamp(16px,4vw,48px); flex-wrap: wrap; max-width: 600px; margin: 0 auto; }
+.hr { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 52px; }
+.hr-day { font-size: .58rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); opacity: .6; }
+.hr-time { font-size: .82rem; font-weight: 600; }
+.hr-closed { opacity: .3; font-weight: 400; }
+.services { padding: clamp(40px,8vw,64px) clamp(20px,6vw,48px); max-width: 500px; margin: 0 auto; width: 100%; }
+.svc-list { list-style: none; }
+.svc-item { display: flex; justify-content: space-between; align-items: baseline; padding: 13px 0; border-bottom: 1px solid var(--line); gap: 16px; }
+.svc-item:first-child { border-top: 1px solid var(--line); }
+.svc-name { font-size: .9rem; }
+.svc-price { font-size: .88rem; font-weight: 700; color: var(--accent); white-space: nowrap; }
+.booking { padding: clamp(48px,10vw,80px) clamp(20px,6vw,48px); }
+.booking-top { text-align: center; margin-bottom: 28px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.blbl { font-size: .62rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--dim); opacity: .5; }
+.booking-ctas { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.widget-shell { max-width: 720px; margin: 28px auto 0; background: rgba(237,234,227,.04); border: 1px solid var(--line-hi); border-radius: 10px; padding: 4px; }
+.widget-core { background: #0A0A0C; border-radius: 7px; overflow: hidden; min-height: 480px; }
+.widget-core iframe { width: 100%; height: 480px; border: none; display: block; }
+footer { padding: 22px clamp(20px,6vw,48px); padding-bottom: max(22px, env(safe-area-inset-bottom,22px)); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.foot-copy { font-size: .62rem; color: var(--dim); opacity: .4; }
+</style>
+</head>
+<body>
+
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<header role="banner">
+  <span class="brand">Be <b>Kind</b> Barbers</span>
+  <a href="https://YOURSHOP.gettimely.com/book" target="_blank" rel="noopener" class="tl">Book on Timely ↗</a>
+</header>
+
+<main>
+  <section class="hero" aria-label="Hero">
+    <div class="hero-text">
+      <h1 class="hero-head">Sharp lines. Clear mind.</h1>
+      <a href="#book" class="book-cta">Book Now <span class="pip" aria-hidden="true">↓</span></a>
+      <div class="hero-meta">
+        <span>123 Cuba St, Wellington</span>
+        <span aria-hidden="true">·</span>
+        <a href="tel:+6404XXXXXXX">04 XXX XXXX</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://maps.google.com/?q=Cuba+Street+Wellington" target="_blank" rel="noopener">Maps ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="panel hours-strip" role="region" aria-label="Opening hours">
+    <div class="hours-row">
+      <div class="hr"><span class="hr-day">Mon</span><span class="hr-time hr-closed">Closed</span></div>
+      <div class="hr"><span class="hr-day">Tue–Fri</span><span class="hr-time">9–7</span></div>
+      <div class="hr"><span class="hr-day">Sat</span><span class="hr-time">8–6</span></div>
+      <div class="hr"><span class="hr-day">Sun</span><span class="hr-time">10–4</span></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <section class="services" aria-label="Services and prices">
+      <ul class="svc-list">
+        <li class="svc-item"><span class="svc-name">Haircut</span><span class="svc-price">$45</span></li>
+        <li class="svc-item"><span class="svc-name">Skin Fade</span><span class="svc-price">$50</span></li>
+        <li class="svc-item"><span class="svc-name">Haircut + Beard</span><span class="svc-price">$65</span></li>
+        <li class="svc-item"><span class="svc-name">Beard Trim</span><span class="svc-price">$35</span></li>
+        <li class="svc-item"><span class="svc-name">Kids Cut</span><span class="svc-price">$30</span></li>
+        <li class="svc-item"><span class="svc-name">Hot Towel Shave</span><span class="svc-price">$50</span></li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="panel">
+    <section class="booking" id="book" aria-labelledby="blbl">
+      <div class="booking-top">
+        <p class="blbl" id="blbl">Choose your time</p>
+        <div class="booking-ctas">
+          <a href="#book" class="book-cta">Book Now <span class="pip" aria-hidden="true">↓</span></a>
+          <a href="https://YOURSHOP.gettimely.com/book" target="_blank" rel="noopener" class="tl">Book on Timely ↗</a>
+        </div>
+      </div>
+      <div class="widget-shell">
+        <div class="widget-core">
+          <iframe loading="lazy" src="https://YOURSHOP.gettimely.com/book/embed"
+            title="Book at Be Kind Barbers" allow="payment"></iframe>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="panel">
+    <span class="foot-copy">© 2025 Be Kind Barbers</span>
+    <a href="https://YOURSHOP.gettimely.com/book" target="_blank" rel="noopener" class="tl">Book on Timely ↗</a>
+  </footer>
+</main>
+
+<script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+<script>
+(function () {
+  'use strict';
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const canvas = document.getElementById('bg');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x060608, 1);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.z = 5.5;
+
+  /* ---- Lighting for chrome ---- */
+  scene.add(new THREE.AmbientLight(0x111122, 4));
+
+  const key = new THREE.PointLight(0xffffff, 5, 30);
+  key.position.set(5, 6, 7);
+  scene.add(key);
+
+  const fill = new THREE.PointLight(0x88AAFF, 2, 20);
+  fill.position.set(-6, 1, 5);
+  scene.add(fill);
+
+  const back = new THREE.PointLight(0x4466AA, 1.8, 15);
+  back.position.set(0, -3, -5);
+  scene.add(back);
+
+  const top = new THREE.PointLight(0xCCDDFF, 2, 20);
+  top.position.set(0, 8, 3);
+  scene.add(top);
+
+  /* ---- Materials ---- */
+  const chromeMat = new THREE.MeshStandardMaterial({
+    color: 0xD0D0D8,
+    metalness: 0.98,
+    roughness: 0.06,
+  });
+
+  const edgeMat = new THREE.MeshStandardMaterial({
+    color: 0xEEEEF4,
+    metalness: 1.0,
+    roughness: 0.02,
+  });
+
+  // Tortoiseshell handle — deep amber-brown
+  const handleMat = new THREE.MeshStandardMaterial({
+    color: 0x3C1F06,
+    metalness: 0.04,
+    roughness: 0.6,
+  });
+
+  const pinMat = new THREE.MeshStandardMaterial({
+    color: 0xAAAAAA,
+    metalness: 0.95,
+    roughness: 0.08,
+  });
+
+  /* ---- Build razor ---- */
+  const razor = new THREE.Group();
+
+  // The straight razor is open at ~50° angle
+  // Pivot is at origin. Blade sweeps up-right, handle sweeps down-left.
+
+  const OPEN_ANGLE = 0.85; // radians ~49°
+
+  /* Blade group — pivots from origin upward */
+  const bladeGroup = new THREE.Group();
+  bladeGroup.rotation.z = OPEN_ANGLE;
+
+  // Blade body — long, thin, flat
+  const bladeGeo = new THREE.BoxGeometry(2.8, 0.52, 0.04);
+  const bladeMesh = new THREE.Mesh(bladeGeo, chromeMat);
+  bladeMesh.position.x = 1.4; // extends from pivot rightward
+  bladeGroup.add(bladeMesh);
+
+  // Spine (back of blade, thicker)
+  const spineGeo = new THREE.BoxGeometry(2.8, 0.08, 0.10);
+  const spineMesh = new THREE.Mesh(spineGeo, chromeMat);
+  spineMesh.position.set(1.4, 0.22, -0.03);
+  bladeGroup.add(spineMesh);
+
+  // Cutting edge (bright strip along bottom)
+  const edgeGeo = new THREE.BoxGeometry(2.76, 0.04, 0.045);
+  const edgeMesh = new THREE.Mesh(edgeGeo, edgeMat);
+  edgeMesh.position.set(1.4, -0.24, 0.0);
+  bladeGroup.add(edgeMesh);
+
+  // Blade tip (wedge end)
+  const tipGeo = new THREE.CylinderGeometry(0.02, 0.26, 0.04, 12);
+  const tipMesh = new THREE.Mesh(tipGeo, chromeMat);
+  tipMesh.rotation.z = Math.PI / 2;
+  tipMesh.position.set(2.80, 0, 0);
+  bladeGroup.add(tipMesh);
+
+  razor.add(bladeGroup);
+
+  /* Handle group — sits at opposite angle from blade */
+  const handleGroup = new THREE.Group();
+  handleGroup.rotation.z = OPEN_ANGLE + Math.PI; // points opposite direction
+
+  // Scale of handle: two rounded scales (front + back)
+  const scaleGeo = new THREE.BoxGeometry(2.6, 0.38, 0.055);
+  const scaleFront = new THREE.Mesh(scaleGeo, handleMat);
+  scaleFront.position.set(1.3, 0, 0.055);
+  handleGroup.add(scaleFront);
+
+  const scaleBack = new THREE.Mesh(scaleGeo, handleMat);
+  scaleBack.position.set(1.3, 0, -0.055);
+  handleGroup.add(scaleBack);
+
+  // Handle end cap
+  const endCapGeo = new THREE.CylinderGeometry(0.19, 0.19, 0.11, 20);
+  const endCap = new THREE.Mesh(endCapGeo, pinMat);
+  endCap.rotation.z = Math.PI / 2;
+  endCap.position.set(2.62, 0, 0);
+  handleGroup.add(endCap);
+
+  // Handle decorative pin
+  const pinGeo = new THREE.CylinderGeometry(0.055, 0.055, 0.20, 12);
+  const pin1 = new THREE.Mesh(pinGeo, pinMat);
+  pin1.rotation.x = Math.PI / 2;
+  pin1.position.set(1.0, 0, 0);
+  handleGroup.add(pin1);
+
+  const pin2 = new THREE.Mesh(pinGeo, pinMat);
+  pin2.rotation.x = Math.PI / 2;
+  pin2.position.set(2.0, 0, 0);
+  handleGroup.add(pin2);
+
+  razor.add(handleGroup);
+
+  /* Pivot pin at origin */
+  const pivotGeo = new THREE.CylinderGeometry(0.09, 0.09, 0.20, 16);
+  const pivot = new THREE.Mesh(pivotGeo, pinMat);
+  pivot.rotation.x = Math.PI / 2;
+  razor.add(pivot);
+
+  // Centre the whole razor
+  razor.position.set(-0.4, 0, 0);
+
+  scene.add(razor);
+
+  /* ---- Header ---- */
+  const hdr = document.querySelector('header');
+  window.addEventListener('scroll', () => {
+    const s = window.scrollY;
+    if (hdr) {
+      hdr.style.background = s > 60 ? 'rgba(6,6,8,.9)' : '';
+      hdr.style.backdropFilter = s > 60 ? 'blur(12px)' : '';
+      hdr.style.borderBottom = s > 60 ? '1px solid rgba(237,234,227,.08)' : '';
+    }
+  }, { passive: true });
+
+  /* ---- Scroll rotation ---- */
+  let scrollY = 0, targetRot = 0, currentRot = 0;
+  window.addEventListener('scroll', () => { scrollY = window.scrollY; }, { passive: true });
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  function animate () {
+    requestAnimationFrame(animate);
+    if (!prefersReduced) {
+      const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      targetRot = (scrollY / max) * Math.PI * 2;
+      currentRot += (targetRot - currentRot) * 0.1;
+      razor.rotation.y = currentRot;
+    }
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+</script>
+</body>
+</html>

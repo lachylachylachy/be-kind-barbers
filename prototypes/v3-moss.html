@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!--
+  CONCEPT: Moss
+  IDEA: A barbershop that feels like a clearing in old-growth forest — deep olive
+        ground, warm gold light. The background is a single vast radial glow that
+        breathes in and out behind the Book Now button, as if the button itself
+        is the light source. Unhurried, meditative, confident.
+  PALETTE: #131A0F (deep moss) · #E8DEC8 (warm light) · #C4912A (gold) · #5A6B4A (sage)
+  TYPE: DM Serif Display (editorial italic) · DM Sans (clean utility)
+  BG MECHANIC: A fixed large circle div behind everything, animating between
+        scale(0.7) opacity(0.3) and scale(1.3) opacity(0.7) on a 6s ease-in-out
+        loop — like a slow breath. The glow is a radial-gradient from gold/amber
+        to transparent. prefers-reduced-motion: frozen at mid-state.
+-->
+<title>Be Kind Barbers — Wellington</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --moss:    #131A0F;
+  --moss-2:  #192212;
+  --light:   #E8DEC8;
+  --light-2: #A89E88;
+  --gold:    #C4912A;
+  --gold-2:  #9E711C;
+  --sage:    #5A6B4A;
+  --line:    rgba(232,222,200,.09);
+  --line-hi: rgba(232,222,200,.15);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .breath { animation: none !important; transform: scale(1.0); opacity: 0.5; }
+  * { transition-duration: 0.01ms !important; }
+}
+body {
+  background: var(--moss);
+  color: var(--light);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+
+/* ===== BREATHING GLOW BG ===== */
+.bg-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.breath {
+  width: 100vmax;
+  height: 100vmax;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(196,145,42,.28) 0%,
+    rgba(196,145,42,.12) 30%,
+    rgba(90,107,74,.06) 60%,
+    transparent 72%);
+  animation: breathe 6s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+@keyframes breathe {
+  from { transform: scale(0.72); opacity: 0.4; }
+  to   { transform: scale(1.35); opacity: 0.85; }
+}
+
+/* ===== HEADER ===== */
+header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: env(safe-area-inset-top, 18px) clamp(20px, 6vw, 48px) 18px;
+  transition: background 0.4s cubic-bezier(0.23,1,0.32,1);
+}
+header.solid {
+  background: rgba(19,26,15,.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  color: var(--light);
+}
+.brand b { color: var(--gold); font-style: normal; }
+.timely-link {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--light-2);
+  border-bottom: 1px solid var(--line-hi);
+  padding-bottom: 2px;
+  transition: color 0.18s;
+}
+@media (hover: hover) and (pointer: fine) {
+  .timely-link:hover { color: var(--light); }
+}
+.timely-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+/* ===== HERO ===== */
+main { position: relative; z-index: 2; }
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 100px clamp(24px, 7vw, 60px) 60px;
+}
+.hero-head {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: clamp(2.8rem, 9.5vw, 5.8rem);
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  margin-bottom: 44px;
+  max-width: 12ch;
+}
+.hero-head strong {
+  font-style: normal;
+  color: var(--gold);
+}
+
+/* THE CTA */
+.book-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: clamp(1rem, 3vw, 1.1rem);
+  letter-spacing: 0.02em;
+  color: var(--moss);
+  background: var(--gold);
+  border: none;
+  cursor: pointer;
+  padding: clamp(16px, 4vw, 20px) clamp(32px, 7vw, 44px);
+  border-radius: 999px;
+  min-height: 60px;
+  transition: background 0.22s cubic-bezier(0.23,1,0.32,1),
+              transform 0.16s cubic-bezier(0.23,1,0.32,1),
+              box-shadow 0.22s cubic-bezier(0.23,1,0.32,1);
+}
+.book-cta .dot {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: rgba(19,26,15,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem;
+  transition: transform 0.22s cubic-bezier(0.23,1,0.32,1);
+  flex-shrink: 0;
+}
+@media (hover: hover) and (pointer: fine) {
+  .book-cta:hover {
+    background: var(--gold-2);
+    box-shadow: 0 0 48px rgba(196,145,42,.4);
+  }
+  .book-cta:hover .dot { transform: translateY(3px); }
+}
+.book-cta:active { transform: scale(0.97); }
+.book-cta:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+.hero-meta {
+  margin-top: 36px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px 18px;
+}
+.hero-meta span, .hero-meta a {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--sage);
+  letter-spacing: 0.04em;
+}
+.hero-meta a { border-bottom: 1px solid rgba(90,107,74,.4); transition: color .18s; }
+@media (hover: hover) and (pointer: fine) {
+  .hero-meta a:hover { color: var(--light-2); }
+}
+.hero-meta a:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.sep { opacity: .4; }
+
+/* HOURS */
+.hours-strip {
+  border-top: 1px solid var(--line);
+  padding: 22px clamp(20px, 6vw, 48px);
+}
+.hours-row {
+  display: flex;
+  justify-content: center;
+  gap: clamp(18px, 4vw, 48px);
+  flex-wrap: wrap;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.hr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-width: 60px;
+}
+.hr-day {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+.hr-time {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--light);
+}
+.hr-closed { color: var(--sage); }
+
+/* SERVICES */
+.services {
+  padding: clamp(48px, 9vw, 80px) clamp(20px, 6vw, 48px);
+  border-top: 1px solid var(--line);
+  max-width: 560px;
+  margin: 0 auto;
+  width: 100%;
+}
+.services-title {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 1.3rem;
+  color: var(--light-2);
+  margin-bottom: 20px;
+  text-align: center;
+}
+.svc-list { list-style: none; }
+.svc-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+  gap: 16px;
+}
+.svc-name {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 1rem;
+}
+.svc-price {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+/* BOOKING */
+.booking {
+  padding: clamp(60px, 10vw, 100px) clamp(20px, 6vw, 48px);
+  border-top: 1px solid var(--line);
+}
+.booking-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  text-align: center;
+}
+.booking-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+.booking-ctas {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* widget */
+.widget-shell {
+  max-width: 740px;
+  margin: 0 auto;
+  background: rgba(232,222,200,.04);
+  border: 1px solid var(--line-hi);
+  border-radius: 12px;
+  padding: 4px;
+}
+.widget-core {
+  background: var(--moss-2);
+  border-radius: 9px;
+  overflow: hidden;
+  min-height: 480px;
+}
+.widget-core iframe {
+  width: 100%; height: 480px;
+  border: none; display: block;
+}
+
+/* FOOTER */
+footer {
+  padding: 24px clamp(20px, 6vw, 48px);
+  padding-bottom: max(24px, env(safe-area-inset-bottom, 24px));
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.foot-copy {
+  font-size: 0.7rem;
+  color: var(--sage);
+  opacity: .7;
+}
+</style>
+</head>
+<body>
+
+<div class="bg-glow" aria-hidden="true">
+  <div class="breath"></div>
+</div>
+
+<header id="hdr" role="banner">
+  <a href="#" class="brand" aria-label="Be Kind Barbers home">Be <b>Kind</b> Barbers</a>
+  <a href="https://YOURSHOP.gettimely.com/book" target="_blank" rel="noopener" class="timely-link" aria-label="Book on Timely, opens in new tab">Book on Timely ↗</a>
+</header>
+
+<main>
+  <section class="hero" aria-label="Book your appointment">
+    <h1 class="hero-head">
+      Every cut,<br><strong>done right.</strong>
+    </h1>
+    <a href="#book" class="book-cta" aria-label="Book now — scroll to booking">
+      Book Now
+      <span class="dot" aria-hidden="true">↓</span>
+    </a>
+    <div class="hero-meta" role="contentinfo">
+      <!-- EDIT: address + phone -->
+      <span>123 Cuba St, Wellington</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <a href="tel:+6404XXXXXXX">04 XXX XXXX</a>
+      <span class="sep" aria-hidden="true">·</span>
+      <a href="https://maps.google.com/?q=Cuba+Street+Wellington" target="_blank" rel="noopener" aria-label="Open Google Maps">Maps ↗</a>
+    </div>
+  </section>
+
+  <div class="hours-strip" role="region" aria-label="Opening hours">
+    <div class="hours-row">
+      <div class="hr"><span class="hr-day">Mon</span><span class="hr-time hr-closed">Closed</span></div>
+      <div class="hr"><span class="hr-day">Tue–Fri</span><span class="hr-time">9 – 7</span></div>
+      <div class="hr"><span class="hr-day">Sat</span><span class="hr-time">8 – 6</span></div>
+      <div class="hr"><span class="hr-day">Sun</span><span class="hr-time">10 – 4</span></div>
+    </div>
+  </div>
+
+  <section class="services" aria-label="Services and prices">
+    <p class="services-title">What we offer</p>
+    <ul class="svc-list">
+      <li class="svc-item"><span class="svc-name">Haircut</span><span class="svc-price">$45</span></li>
+      <li class="svc-item"><span class="svc-name">Skin Fade</span><span class="svc-price">$50</span></li>
+      <li class="svc-item"><span class="svc-name">Haircut + Beard</span><span class="svc-price">$65</span></li>
+      <li class="svc-item"><span class="svc-name">Beard Trim</span><span class="svc-price">$35</span></li>
+      <li class="svc-item"><span class="svc-name">Kids Cut</span><span class="svc-price">$30</span></li>
+      <li class="svc-item"><span class="svc-name">Hot Towel Shave</span><span class="svc-price">$50</span></li>
+    </ul>
+  </section>
+
+  <section class="booking" id="book" aria-labelledby="book-lbl">
+    <div class="booking-top">
+      <p class="booking-label" id="book-lbl">Choose your time</p>
+      <div class="booking-ctas">
+        <a href="#book" class="book-cta" aria-label="Book an appointment">
+          Book Now
+          <span class="dot" aria-hidden="true">↓</span>
+        </a>
+        <a href="https://YOURSHOP.gettimely.com/book" target="_blank" rel="noopener" class="timely-link" aria-label="Open Timely in new tab">Book on Timely ↗</a>
+      </div>
+    </div>
+    <div class="widget-shell">
+      <div class="widget-core">
+        <!-- EDIT: timely — replace src with https://YOURSHOP.gettimely.com/book/embed -->
+        <iframe
+          loading="lazy"
+          src="https://YOURSHOP.gettimely.com/book/embed"
+          title="Book an appointment at Be Kind Barbers"
+          allow="payment"
+          aria-label="Timely booking widget"></iframe>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span class="foot-copy">© 2025 Be Kind Barbers · Wellington</span>
+  <a href="https://YOURSHOP.gettimely.com/book" target="_blank" rel="noopener" class="timely-link" aria-label="Book on Timely">Book on Timely ↗</a>
+</footer>
+
+<script>
+(function(){
+  const hdr = document.getElementById('hdr');
+  window.addEventListener('scroll', () => {
+    hdr.classList.toggle('solid', window.scrollY > 50);
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>
