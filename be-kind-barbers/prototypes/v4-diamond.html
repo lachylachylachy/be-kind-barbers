@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!--
+  CONCEPT: Diamond
+  OBJECT: A faceted brilliant-cut gem — custom geometry built from two
+          frustrums (upper crown + lower pavilion) with flat-shaded faces
+          to maximise the catch-light effect on each facet as it rotates.
+          Deep gold / amber colour. Nods to "Diamante" in the clipper name.
+  SCROLL: rotateY 0 → 2π. Also a very slow rotateX drift for depth. Lerp 0.08.
+  PALETTE: #06050A deep violet-void · #EDEAE3 light · #E8C840 diamond gold CTA
+  TYPE: Outfit 800 / 400
+-->
+<title>Be Kind Barbers — Wellington</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --accent: #E8C840;
+  --void:   #06050A;
+  --light:  #EDEAE3;
+  --dim:    #7A7670;
+  --line:   rgba(237,234,227,.09);
+  --line-hi:rgba(237,234,227,.15);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  background: var(--void);
+  color: var(--light);
+  font-family: 'Outfit', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+#bg { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+header {
+  position: fixed; inset: 0 0 auto; z-index: 30;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: env(safe-area-inset-top, 18px) clamp(20px,6vw,48px) 18px;
+}
+.brand { font-weight: 700; font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); }
+.brand b { color: var(--accent); }
+.tl { font-size: .68rem; font-weight: 500; color: var(--dim); border-bottom: 1px solid var(--line-hi); padding-bottom: 2px; transition: color .18s; }
+@media (hover: hover) and (pointer: fine) { .tl:hover { color: var(--light); } }
+.tl:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+main { position: relative; z-index: 10; }
+.hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 clamp(20px,6vw,48px) clamp(40px,7vh,72px); }
+.hero-text { text-align: center; max-width: 560px; margin: 0 auto; width: 100%; }
+.hero-head { font-weight: 800; font-size: clamp(2rem,7vw,4.2rem); letter-spacing: -0.04em; line-height: .93; text-wrap: balance; margin-bottom: 28px; }
+.book-cta {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-weight: 700; font-size: clamp(.9rem,3vw,1rem);
+  color: var(--void); background: var(--accent);
+  padding: 15px 34px; border-radius: 999px; min-height: 54px;
+  border: none; cursor: pointer;
+  transition: background .2s cubic-bezier(.23,1,.32,1), transform .16s cubic-bezier(.23,1,.32,1);
+}
+.pip { width: 22px; height: 22px; border-radius: 50%; background: rgba(6,5,10,.16); display: flex; align-items: center; justify-content: center; font-size: .85rem; flex-shrink: 0; transition: transform .2s cubic-bezier(.23,1,.32,1); }
+@media (hover: hover) and (pointer: fine) { .book-cta:hover { background: #C8A820; } .book-cta:hover .pip { transform: translateY(3px); } }
+.book-cta:active { transform: scale(.97); }
+.book-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.hero-meta { margin-top: 18px; display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.hero-meta span, .hero-meta a { font-size: .7rem; color: var(--dim); }
+.hero-meta a { border-bottom: 1px solid var(--line-hi); padding-bottom: 1px; }
+.hero-meta a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.panel { background: rgba(6,5,10,.94); backdrop-filter: blur(6px); border-top: 1px solid var(--line); }
+.hours-strip { padding: 20px clamp(20px,6vw,48px); }
+.hours-row { display: flex; justify-content: center; gap: clamp(16px,4vw,48px); flex-wrap: wrap; max-width: 600px; margin: 0 auto; }
+.hr { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 52px; }
+.hr-day { font-size: .58rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); opacity: .6; }
+.hr-time { font-size: .82rem; font-weight: 600; }
+.hr-closed { opacity: .3; font-weight: 400; }
+.services { padding: clamp(40px,8vw,64px) clamp(20px,6vw,48px); max-width: 500px; margin: 0 auto; width: 100%; }
+.svc-list { list-style: none; }
+.svc-item { display: flex; justify-content: space-between; align-items: baseline; padding: 13px 0; border-bottom: 1px solid var(--line); gap: 16px; }
+.svc-item:first-child { border-top: 1px solid var(--line); }
+.svc-name { font-size: .9rem; }
+.svc-price { font-size: .88rem; font-weight: 700; color: var(--accent); white-space: nowrap; }
+.booking { padding: clamp(48px,10vw,80px) clamp(20px,6vw,48px); }
+.booking-top { text-align: center; margin-bottom: 28px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.blbl { font-size: .62rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--dim); opacity: .5; }
+.booking-ctas { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.widget-shell { max-width: 720px; margin: 28px auto 0; background: rgba(237,234,227,.04); border: 1px solid var(--line-hi); border-radius: 10px; padding: 4px; }
+.widget-core { background: #0A090F; border-radius: 7px; overflow: hidden; min-height: 480px; }
+.widget-core iframe { width: 100%; height: 480px; border: none; display: block; }
+footer { padding: 22px clamp(20px,6vw,48px); padding-bottom: max(22px, env(safe-area-inset-bottom,22px)); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.foot-copy { font-size: .62rem; color: var(--dim); opacity: .4; }
+</style>
+</head>
+<body>
+
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<header role="banner">
+  <span class="brand">Be <b>Kind</b> Barbers</span>
+  <a href="https://YOURSHOP.gettimely.com/book" target="_blank" rel="noopener" class="tl">Book on Timely ↗</a>
+</header>
+
+<main>
+  <section class="hero" aria-label="Hero">
+    <div class="hero-text">
+      <h1 class="hero-head">Cut from a different cloth.</h1>
+      <a href="#book" class="book-cta">Book Now <span class="pip" aria-hidden="true">↓</span></a>
+      <div class="hero-meta">
+        <span>123 Cuba St, Wellington</span>
+        <span aria-hidden="true">·</span>
+        <a href="tel:+6404XXXXXXX">04 XXX XXXX</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://maps.google.com/?q=Cuba+Street+Wellington" target="_blank" rel="noopener">Maps ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="panel hours-strip" role="region" aria-label="Opening hours">
+    <div class="hours-row">
+      <div class="hr"><span class="hr-day">Mon</span><span class="hr-time hr-closed">Closed</span></div>
+      <div class="hr"><span class="hr-day">Tue–Fri</span><span class="hr-time">9–7</span></div>
+      <div class="hr"><span class="hr-day">Sat</span><span class="hr-time">8–6</span></div>
+      <div class="hr"><span class="hr-day">Sun</span><span class="hr-time">10–4</span></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <section class="services" aria-label="Services and prices">
+      <ul class="svc-list">
+        <li class="svc-item"><span class="svc-name">Haircut</span><span class="svc-price">$45</span></li>
+        <li class="svc-item"><span class="svc-name">Skin Fade</span><span class="svc-price">$50</span></li>
+        <li class="svc-item"><span class="svc-name">Haircut + Beard</span><span class="svc-price">$65</span></li>
+        <li class="svc-item"><span class="svc-name">Beard Trim</span><span class="svc-price">$35</span></li>
+        <li class="svc-item"><span class="svc-name">Kids Cut</span><span class="svc-price">$30</span></li>
+        <li class="svc-item"><span class="svc-name">Hot Towel Shave</span><span class="svc-price">$50</span></li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="panel">
+    <section class="booking" id="book" aria-labelledby="blbl">
+      <div class="booking-top">
+        <p class="blbl" id="blbl">Choose your time</p>
+        <div class="booking-ctas">
+          <a href="#book" class="book-cta">Book Now <span class="pip" aria-hidden="true">↓</span></a>
+          <a href="https://YOURSHOP.gettimely.com/book" target="_blank" rel="noopener" class="tl">Book on Timely ↗</a>
+        </div>
+      </div>
+      <div class="widget-shell">
+        <div class="widget-core">
+          <iframe loading="lazy" src="https://YOURSHOP.gettimely.com/book/embed"
+            title="Book at Be Kind Barbers" allow="payment"></iframe>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="panel">
+    <span class="foot-copy">© 2025 Be Kind Barbers</span>
+    <a href="https://YOURSHOP.gettimely.com/book" target="_blank" rel="noopener" class="tl">Book on Timely ↗</a>
+  </footer>
+</main>
+
+<script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+<script>
+(function () {
+  'use strict';
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const canvas = document.getElementById('bg');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x06050A, 1);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(46, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.z = 5;
+
+  /* ---- Dramatic lighting for gem facets ---- */
+  scene.add(new THREE.AmbientLight(0x110A00, 3));
+
+  const lights = [
+    { color: 0xFFEE88, intensity: 6, pos: [4, 6, 6] },
+    { color: 0xFF8844, intensity: 3, pos: [-5, 2, 4] },
+    { color: 0x4488FF, intensity: 2, pos: [0, -5, 3] },
+    { color: 0xFFCC00, intensity: 2.5, pos: [0, 5, -3] },
+    { color: 0xFF4400, intensity: 1.5, pos: [-3, -2, -4] },
+  ];
+  lights.forEach(({ color, intensity, pos }) => {
+    const l = new THREE.PointLight(color, intensity, 30);
+    l.position.set(...pos);
+    scene.add(l);
+  });
+
+  /* ---- Build brilliant-cut gem geometry ---- */
+  // Brilliant cut: table (flat top) + crown (upper facets) + girdle + pavilion (lower facets)
+  // Built from BufferGeometry with flat shading for maximum facet contrast
+
+  function buildDiamond () {
+    const vertices = [];
+    const indices = [];
+    const N = 8; // number of sides (octagonal for round-ish brilliant)
+
+    // Key dimensions
+    const tableR = 0.52;   // table (top flat face) radius
+    const girdleR = 0.90;  // widest point (girdle)
+    const crownH = 0.38;   // height of crown above girdle
+    const tableH = crownH; // table sits at top of crown
+    const pavilH = 1.10;   // depth of pavilion below girdle
+    const culetH = 0.0;    // culet at bottom (point)
+
+    // Vertex indices:
+    // 0: culet (bottom point)
+    // 1..N: girdle ring
+    // N+1..2N: table ring (at crown height)
+    // 2N+1: table centre
+
+    // Culet
+    vertices.push(0, -(pavilH), 0);  // idx 0
+
+    // Girdle ring (at y=0)
+    for (let i = 0; i < N; i++) {
+      const a = (i / N) * Math.PI * 2;
+      vertices.push(
+        Math.cos(a) * girdleR,
+        0,
+        Math.sin(a) * girdleR
+      );
+    }
+
+    // Table ring (at y = crownH)
+    for (let i = 0; i < N; i++) {
+      const a = (i / N) * Math.PI * 2 + (Math.PI / N); // offset half step
+      vertices.push(
+        Math.cos(a) * tableR,
+        crownH,
+        Math.sin(a) * tableR
+      );
+    }
+
+    // Table centre
+    vertices.push(0, crownH, 0); // idx 2*N+1
+
+    const girdleStart = 1;
+    const tableStart  = N + 1;
+    const tableCentre = 2 * N + 1;
+
+    // Pavilion triangles (culet → girdle ring)
+    for (let i = 0; i < N; i++) {
+      const a = girdleStart + i;
+      const b = girdleStart + (i + 1) % N;
+      indices.push(0, b, a);
+    }
+
+    // Crown lateral facets (girdle → table ring, kite-shaped quads split into tris)
+    for (let i = 0; i < N; i++) {
+      const ga = girdleStart + i;
+      const gb = girdleStart + (i + 1) % N;
+      const ta = tableStart  + i;
+      const tb = tableStart  + (i + 1) % N;
+      // Upper kite: gb, ta, tb
+      indices.push(ga, gb, tb);
+      indices.push(ga, tb, ta);
+    }
+
+    // Table face (fan from centre)
+    for (let i = 0; i < N; i++) {
+      const ta = tableStart + i;
+      const tb = tableStart + (i + 1) % N;
+      indices.push(tableCentre, ta, tb);
+    }
+
+    const posArray = new Float32Array(vertices);
+    const idxArray = new Uint16Array(indices);
+
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    geo.setIndex(new THREE.BufferAttribute(idxArray, 1));
+    // Flat normals — each face gets its own shading (the gem-flash effect)
+    geo.computeVertexNormals();
+
+    return geo;
+  }
+
+  const gemMat = new THREE.MeshStandardMaterial({
+    color: 0xC89020,
+    metalness: 0.88,
+    roughness: 0.08,
+    side: THREE.DoubleSide,
+    flatShading: true,  // Each face shades independently → dramatic flash
+  });
+
+  const gem = new THREE.Mesh(buildDiamond(), gemMat);
+  // Tilt slightly so we see crown + pavilion in frame
+  gem.rotation.x = 0.24;
+  scene.add(gem);
+
+  // Subtle glow sphere behind gem
+  const glowGeo = new THREE.SphereGeometry(1.4, 16, 16);
+  const glowMat = new THREE.MeshBasicMaterial({
+    color: 0xC88000,
+    transparent: true,
+    opacity: 0.04,
+  });
+  scene.add(new THREE.Mesh(glowGeo, glowMat));
+
+  /* ---- Header ---- */
+  const hdr = document.querySelector('header');
+  window.addEventListener('scroll', () => {
+    const s = window.scrollY;
+    if (hdr) {
+      hdr.style.background = s > 60 ? 'rgba(6,5,10,.9)' : '';
+      hdr.style.backdropFilter = s > 60 ? 'blur(12px)' : '';
+      hdr.style.borderBottom = s > 60 ? '1px solid rgba(237,234,227,.08)' : '';
+    }
+  }, { passive: true });
+
+  /* ---- Scroll rotation ---- */
+  let scrollY = 0, targetRot = 0, currentRot = 0;
+  window.addEventListener('scroll', () => { scrollY = window.scrollY; }, { passive: true });
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  let tick = 0;
+  function animate () {
+    requestAnimationFrame(animate);
+    if (!prefersReduced) {
+      const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      targetRot = (scrollY / max) * Math.PI * 2;
+      currentRot += (targetRot - currentRot) * 0.08;
+      gem.rotation.y = currentRot;
+      // Very slow ambient drift on X so we always see a bit of crown
+      tick += 0.005;
+      gem.rotation.x = 0.24 + Math.sin(tick) * 0.08;
+    }
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+</script>
+</body>
+</html>

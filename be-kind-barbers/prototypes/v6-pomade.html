@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!--
+  CONCEPT: Pomade
+  OBJECT: A premium pomade tin — squat cylinder body with a canvas-drawn
+          wrap-around label (BE KIND · POMADE) so the rotation actually reads,
+          topped by a brushed-brass lid. MeshPhongMaterial throughout, warm
+          point lights for a gold glow.
+  COLOUR STRATEGY: Drenched oxblood. The surface IS the colour — deep wine
+          body bg, warm cream type, brass as the single metal accent.
+  PALETTE: #3A1018 oxblood · #F2E8E0 warm cream · #C8962C brass CTA
+-->
+<title>Be Kind Barbers — Wellington</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Outfit:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--a:#C8962C;--a2:#A87C1E;--v:#3A1018;--v2:#2C0C12;--l:#F2E8E0;--d:#B48E88;--ln:rgba(242,232,224,.12);--lh:rgba(242,232,224,.2)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--v);color:var(--l);font-family:'Outfit',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+#bg{position:fixed;inset:0;z-index:1;pointer-events:none}
+header{position:fixed;inset:0 0 auto;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:env(safe-area-inset-top,18px) clamp(20px,6vw,48px) 18px}
+.brand{font-weight:700;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--d)}.brand b{color:var(--a)}
+.tl{font-size:.68rem;font-weight:500;color:var(--d);border-bottom:1px solid var(--lh);padding-bottom:2px;transition:color .18s}
+@media(hover:hover) and (pointer:fine){.tl:hover{color:var(--l)}}
+.tl:focus-visible{outline:2px solid var(--a);outline-offset:3px}
+main{position:relative;z-index:10}
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 clamp(20px,6vw,48px) clamp(40px,7vh,72px)}
+.hero-text{text-align:center;max-width:600px;margin:0 auto;width:100%}
+.hero-head{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2.2rem,7.5vw,4.6rem);letter-spacing:-.025em;line-height:.98;text-wrap:balance;margin-bottom:28px}
+.hero-head em{font-style:italic;font-weight:500;color:var(--a)}
+.cta{display:inline-flex;align-items:center;gap:12px;font-weight:700;font-size:clamp(.9rem,3vw,1rem);color:var(--v);background:var(--a);padding:15px 34px;border-radius:999px;min-height:54px;border:none;cursor:pointer;transition:background .2s cubic-bezier(.23,1,.32,1),transform .16s cubic-bezier(.23,1,.32,1)}
+.pip{width:22px;height:22px;border-radius:50%;background:rgba(58,16,24,.2);display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0;transition:transform .2s cubic-bezier(.23,1,.32,1)}
+@media(hover:hover) and (pointer:fine){.cta:hover{background:var(--a2)}.cta:hover .pip{transform:translateY(3px)}}
+.cta:active{transform:scale(.97)}.cta:focus-visible{outline:2px solid var(--a);outline-offset:4px}
+.meta{margin-top:18px;display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+.meta span,.meta a{font-size:.72rem;color:var(--d)}.meta a{border-bottom:1px solid var(--lh);padding-bottom:1px}
+.meta a:focus-visible{outline:2px solid var(--a);outline-offset:2px}
+.panel{background:rgba(44,12,18,.92);backdrop-filter:blur(6px);border-top:1px solid var(--ln)}
+.hs{padding:20px clamp(20px,6vw,48px)}.hr-row{display:flex;justify-content:center;gap:clamp(16px,4vw,48px);flex-wrap:wrap;max-width:600px;margin:0 auto}
+.hr{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:52px}
+.hd{font-size:.58rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--d);opacity:.8}
+.ht{font-size:.82rem;font-weight:600}.hc{opacity:.45;font-weight:400}
+.svc-sec{padding:clamp(40px,8vw,64px) clamp(20px,6vw,48px);max-width:500px;margin:0 auto;width:100%}
+.svc-list{list-style:none}.svc-item{display:flex;justify-content:space-between;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--ln);gap:16px}
+.svc-item:first-child{border-top:1px solid var(--ln)}.sn{font-size:.92rem}.sp{font-family:'Fraunces',serif;font-size:.95rem;font-weight:600;color:var(--a);white-space:nowrap}
+.book{padding:clamp(48px,10vw,80px) clamp(20px,6vw,48px)}
+.bt{text-align:center;margin-bottom:28px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.bl{font-size:.62rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--d);opacity:.7}
+.bc{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center}
+.ws{max-width:720px;margin:28px auto 0;background:rgba(242,232,224,.05);border:1px solid var(--lh);border-radius:10px;padding:4px}
+.wc{background:#240A10;border-radius:7px;overflow:hidden;min-height:480px}.wc iframe{width:100%;height:480px;border:none;display:block}
+footer{padding:22px clamp(20px,6vw,48px);padding-bottom:max(22px,env(safe-area-inset-bottom,22px));display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.fc{font-size:.62rem;color:var(--d);opacity:.6}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<header id="hdr" role="banner">
+  <span class="brand">Be <b>Kind</b> Barbers</span>
+  <a href="https://YOURSHOP.gettimely.com/book" target="_blank" rel="noopener" class="tl">Book on Timely ↗</a>
+</header>
+<main>
+  <section class="hero" aria-label="Hero">
+    <div class="hero-text">
+      <h1 class="hero-head">Finish the cut with <em>real</em> craft.</h1>
+      <a href="#book" class="cta">Book Now <span class="pip" aria-hidden="true">↓</span></a>
+      <div class="meta">
+        <span>123 Cuba St, Wellington</span><span aria-hidden="true">·</span>
+        <a href="tel:+6404XXXXXXX">04 XXX XXXX</a><span aria-hidden="true">·</span>
+        <a href="https://maps.google.com/?q=Cuba+Street+Wellington" target="_blank" rel="noopener">Maps ↗</a>
+      </div>
+    </div>
+  </section>
+  <div class="panel hs" role="region" aria-label="Opening hours">
+    <div class="hr-row">
+      <div class="hr"><span class="hd">Mon</span><span class="ht hc">Closed</span></div>
+      <div class="hr"><span class="hd">Tue–Fri</span><span class="ht">9–7</span></div>
+      <div class="hr"><span class="hd">Sat</span><span class="ht">8–6</span></div>
+      <div class="hr"><span class="hd">Sun</span><span class="ht">10–4</span></div>
+    </div>
+  </div>
+  <div class="panel">
+    <section class="svc-sec" aria-label="Services and prices">
+      <ul class="svc-list">
+        <li class="svc-item"><span class="sn">Haircut</span><span class="sp">$45</span></li>
+        <li class="svc-item"><span class="sn">Skin Fade</span><span class="sp">$50</span></li>
+        <li class="svc-item"><span class="sn">Haircut + Beard</span><span class="sp">$65</span></li>
+        <li class="svc-item"><span class="sn">Beard Trim</span><span class="sp">$35</span></li>
+        <li class="svc-item"><span class="sn">Kids Cut</span><span class="sp">$30</span></li>
+        <li class="svc-item"><span class="sn">Hot Towel Shave</span><span class="sp">$50</span></li>
+      </ul>
+    </section>
+  </div>
+  <div class="panel">
+    <section class="book" id="book" aria-labelledby="blbl">
+      <div class="bt">
+        <p class="bl" id="blbl">Choose your time</p>
+        <div class="bc">
+          <a href="#book" class="cta">Book Now <span class="pip" aria-hidden="true">↓</span></a>
+          <a href="https://YOURSHOP.gettimely.com/book" target="_blank" rel="noopener" class="tl">Book on Timely ↗</a>
+        </div>
+      </div>
+      <div class="ws"><div class="wc">
+        <iframe loading="lazy" src="https://YOURSHOP.gettimely.com/book/embed" title="Book at Be Kind Barbers" allow="payment"></iframe>
+      </div></div>
+    </section>
+  </div>
+  <footer class="panel">
+    <span class="fc">© 2025 Be Kind Barbers</span>
+    <a href="https://YOURSHOP.gettimely.com/book" target="_blank" rel="noopener" class="tl">Book on Timely ↗</a>
+  </footer>
+</main>
+<script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+<script>
+(function () {
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const canvas = document.getElementById('bg');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setClearColor(0x3A1018, 1);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(44, innerWidth / innerHeight, 0.1, 100);
+  camera.position.set(0, 0.4, 5);
+  camera.lookAt(0, 0, 0);
+
+  scene.add(new THREE.AmbientLight(0x2A1208, 6));
+  [
+    { c: 0xFFE6A8, i: 9, p: [4, 6, 6] },
+    { c: 0xFFB860, i: 5, p: [-5, 2, 5] },
+    { c: 0xFFD080, i: 4, p: [0, -4, 4] },
+    { c: 0xCC8844, i: 3, p: [0, 5, -3] },
+  ].forEach(({ c, i, p }) => { const l = new THREE.PointLight(c, i, 30); l.position.set(...p); scene.add(l); });
+
+  /* Wrap-around label texture */
+  function labelTexture() {
+    const W = 1024, H = 512, c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    const x = c.getContext('2d');
+    x.fillStyle = '#241016'; x.fillRect(0, 0, W, H);
+    // top & bottom brass rules
+    x.strokeStyle = '#C8962C'; x.lineWidth = 6;
+    x.strokeRect(40, 60, W - 80, H - 120);
+    x.fillStyle = '#E8C778';
+    x.textAlign = 'center'; x.textBaseline = 'middle';
+    x.font = '700 70px Outfit, sans-serif';
+    x.fillText('BE KIND', W / 2, H / 2 - 46);
+    x.font = '400 italic 40px Georgia, serif';
+    x.fillStyle = '#F2E8E0';
+    x.fillText('— pomade —', W / 2, H / 2 + 24);
+    x.font = '700 22px Outfit, sans-serif';
+    x.fillStyle = '#B48E88';
+    x.fillText('STRONG HOLD · MATTE FINISH', W / 2, H / 2 + 84);
+    const t = new THREE.CanvasTexture(c);
+    t.anisotropy = 4;
+    return t;
+  }
+
+  const brass = new THREE.MeshPhongMaterial({ color: 0xC8962C, specular: 0xFFE8B0, shininess: 160 });
+  const brassDark = new THREE.MeshPhongMaterial({ color: 0x9A7320, specular: 0xE8C878, shininess: 120 });
+
+  const group = new THREE.Group();
+
+  // Body with label
+  const bodyGeo = new THREE.CylinderGeometry(1.25, 1.25, 0.95, 64, 1, false);
+  const bodyMat = new THREE.MeshPhongMaterial({ map: labelTexture(), specular: 0x553322, shininess: 40 });
+  const body = new THREE.Mesh(bodyGeo, bodyMat);
+  body.position.y = -0.35;
+  group.add(body);
+
+  // Body top & bottom brass discs
+  const discGeo = new THREE.CylinderGeometry(1.26, 1.26, 0.04, 64);
+  const dBot = new THREE.Mesh(discGeo, brassDark); dBot.position.y = -0.83; group.add(dBot);
+
+  // Lid — slightly wider, brushed brass
+  const lidGeo = new THREE.CylinderGeometry(1.32, 1.30, 0.42, 64, 1, false);
+  const lid = new THREE.Mesh(lidGeo, brass);
+  lid.position.y = 0.34;
+  group.add(lid);
+
+  // Lid top embossed disc
+  const lidTopGeo = new THREE.CylinderGeometry(1.0, 1.0, 0.06, 64);
+  const lidTop = new THREE.Mesh(lidTopGeo, brassDark);
+  lidTop.position.y = 0.56;
+  group.add(lidTop);
+
+  group.rotation.x = 0.16;
+  scene.add(group);
+
+  const hdr = document.getElementById('hdr');
+  let scrollY = 0, target = 0, current = 0;
+  window.addEventListener('scroll', () => {
+    scrollY = window.scrollY;
+    const past = scrollY > 60;
+    if (hdr) { hdr.style.background = past ? 'rgba(44,12,18,.9)' : ''; hdr.style.backdropFilter = past ? 'blur(12px)' : ''; hdr.style.borderBottom = past ? '1px solid rgba(242,232,224,.1)' : ''; }
+  }, { passive: true });
+  window.addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    if (!prefersReduced) {
+      const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+      target = (scrollY / max) * Math.PI * 2;
+      current += (target - current) * 0.09;
+      group.rotation.y = current;
+    }
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+</script>
+</body>
+</html>

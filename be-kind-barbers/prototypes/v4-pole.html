@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!--
+  CONCEPT: Pole
+  OBJECT: Classic barber pole — CylinderGeometry with a canvas-drawn diagonal
+          red/white/blue stripe texture. Chrome end caps top and bottom.
+          The pole fills most of the viewport, tall and narrow.
+  SCROLL: rotateY 0 → 2π over full page scroll. Lerp 0.1 for physical weight.
+  PALETTE: #070709 void · #EDEAE3 light · #CC1122 red (pole) CTA
+  TYPE: Outfit 800 / 400
+-->
+<title>Be Kind Barbers — Wellington</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --accent: #CC1122;
+  --void:   #070709;
+  --light:  #EDEAE3;
+  --dim:    #7A7670;
+  --line:   rgba(237,234,227,.09);
+  --line-hi:rgba(237,234,227,.15);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  background: var(--void);
+  color: var(--light);
+  font-family: 'Outfit', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+
+#bg { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+
+header {
+  position: fixed; inset: 0 0 auto; z-index: 30;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: env(safe-area-inset-top, 18px) clamp(20px, 6vw, 48px) 18px;
+  transition: background .3s;
+}
+.brand { font-weight: 700; font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); }
+.brand b { color: var(--accent); }
+.tl { font-size: .68rem; font-weight: 500; color: var(--dim); border-bottom: 1px solid var(--line-hi); padding-bottom: 2px; transition: color .18s; }
+@media (hover: hover) and (pointer: fine) { .tl:hover { color: var(--light); } }
+.tl:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+main { position: relative; z-index: 10; }
+
+.hero {
+  min-height: 100svh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0 clamp(20px, 6vw, 48px) clamp(40px, 7vh, 72px);
+}
+.hero-text { text-align: center; max-width: 560px; margin: 0 auto; width: 100%; }
+.hero-head {
+  font-weight: 800;
+  font-size: clamp(2rem, 7vw, 4.2rem);
+  letter-spacing: -0.04em; line-height: .93;
+  text-wrap: balance; margin-bottom: 28px;
+}
+
+.book-cta {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-weight: 700; font-size: clamp(.9rem, 3vw, 1rem);
+  color: var(--light); background: var(--accent);
+  padding: 15px 34px; border-radius: 999px; min-height: 54px;
+  border: none; cursor: pointer;
+  transition: background .2s cubic-bezier(.23,1,.32,1), transform .16s cubic-bezier(.23,1,.32,1);
+}
+.pip {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(237,234,227,.18);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .85rem; flex-shrink: 0;
+  transition: transform .2s cubic-bezier(.23,1,.32,1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .book-cta:hover { background: #A80E1A; }
+  .book-cta:hover .pip { transform: translateY(3px); }
+}
+.book-cta:active { transform: scale(.97); }
+.book-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+.hero-meta {
+  margin-top: 18px; display: flex; justify-content: center;
+  gap: 14px; flex-wrap: wrap;
+}
+.hero-meta span, .hero-meta a { font-size: .7rem; color: var(--dim); }
+.hero-meta a { border-bottom: 1px solid var(--line-hi); padding-bottom: 1px; }
+.hero-meta a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.panel { background: rgba(7,7,9,.94); backdrop-filter: blur(6px); border-top: 1px solid var(--line); }
+
+.hours-strip { padding: 20px clamp(20px,6vw,48px); }
+.hours-row { display: flex; justify-content: center; gap: clamp(16px,4vw,48px); flex-wrap: wrap; max-width: 600px; margin: 0 auto; }
+.hr { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 52px; }
+.hr-day { font-size: .58rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); opacity: .6; }
+.hr-time { font-size: .82rem; font-weight: 600; }
+.hr-closed { opacity: .3; font-weight: 400; }
+
+.services { padding: clamp(40px,8vw,64px) clamp(20px,6vw,48px); max-width: 500px; margin: 0 auto; width: 100%; }
+.svc-list { list-style: none; }
+.svc-item { display: flex; justify-content: space-between; align-items: baseline; padding: 13px 0; border-bottom: 1px solid var(--line); gap: 16px; }
+.svc-item:first-child { border-top: 1px solid var(--line); }
+.svc-name { font-size: .9rem; }
+.svc-price { font-size: .88rem; font-weight: 700; color: var(--accent); white-space: nowrap; }
+
+.booking { padding: clamp(48px,10vw,80px) clamp(20px,6vw,48px); }
+.booking-top { text-align: center; margin-bottom: 28px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.blbl { font-size: .62rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--dim); opacity: .5; }
+.booking-ctas { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.widget-shell { max-width: 720px; margin: 28px auto 0; background: rgba(237,234,227,.04); border: 1px solid var(--line-hi); border-radius: 10px; padding: 4px; }
+.widget-core { background: #0C0C0E; border-radius: 7px; overflow: hidden; min-height: 480px; }
+.widget-core iframe { width: 100%; height: 480px; border: none; display: block; }
+
+footer { padding: 22px clamp(20px,6vw,48px); padding-bottom: max(22px, env(safe-area-inset-bottom,22px)); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.foot-copy { font-size: .62rem; color: var(--dim); opacity: .4; }
+</style>
+</head>
+<body>
+
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<header role="banner">
+  <span class="brand">Be <b>Kind</b> Barbers</span>
+  <a href="https://YOURSHOP.gettimely.com/book" target="_blank" rel="noopener" class="tl">Book on Timely ↗</a>
+</header>
+
+<main>
+  <section class="hero" aria-label="Hero">
+    <div class="hero-text">
+      <h1 class="hero-head">The craft is in the care.</h1>
+      <a href="#book" class="book-cta">Book Now <span class="pip" aria-hidden="true">↓</span></a>
+      <div class="hero-meta">
+        <span>123 Cuba St, Wellington</span>
+        <span aria-hidden="true">·</span>
+        <a href="tel:+6404XXXXXXX">04 XXX XXXX</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://maps.google.com/?q=Cuba+Street+Wellington" target="_blank" rel="noopener">Maps ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="panel hours-strip" role="region" aria-label="Opening hours">
+    <div class="hours-row">
+      <div class="hr"><span class="hr-day">Mon</span><span class="hr-time hr-closed">Closed</span></div>
+      <div class="hr"><span class="hr-day">Tue–Fri</span><span class="hr-time">9–7</span></div>
+      <div class="hr"><span class="hr-day">Sat</span><span class="hr-time">8–6</span></div>
+      <div class="hr"><span class="hr-day">Sun</span><span class="hr-time">10–4</span></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <section class="services" aria-label="Services and prices">
+      <ul class="svc-list">
+        <li class="svc-item"><span class="svc-name">Haircut</span><span class="svc-price">$45</span></li>
+        <li class="svc-item"><span class="svc-name">Skin Fade</span><span class="svc-price">$50</span></li>
+        <li class="svc-item"><span class="svc-name">Haircut + Beard</span><span class="svc-price">$65</span></li>
+        <li class="svc-item"><span class="svc-name">Beard Trim</span><span class="svc-price">$35</span></li>
+        <li class="svc-item"><span class="svc-name">Kids Cut</span><span class="svc-price">$30</span></li>
+        <li class="svc-item"><span class="svc-name">Hot Towel Shave</span><span class="svc-price">$50</span></li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="panel">
+    <section class="booking" id="book" aria-labelledby="blbl">
+      <div class="booking-top">
+        <p class="blbl" id="blbl">Choose your time</p>
+        <div class="booking-ctas">
+          <a href="#book" class="book-cta">Book Now <span class="pip" aria-hidden="true">↓</span></a>
+          <a href="https://YOURSHOP.gettimely.com/book" target="_blank" rel="noopener" class="tl">Book on Timely ↗</a>
+        </div>
+      </div>
+      <div class="widget-shell">
+        <div class="widget-core">
+          <iframe loading="lazy" src="https://YOURSHOP.gettimely.com/book/embed"
+            title="Book at Be Kind Barbers" allow="payment"></iframe>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="panel">
+    <span class="foot-copy">© 2025 Be Kind Barbers</span>
+    <a href="https://YOURSHOP.gettimely.com/book" target="_blank" rel="noopener" class="tl">Book on Timely ↗</a>
+  </footer>
+</main>
+
+<script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+<script>
+(function () {
+  'use strict';
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const canvas = document.getElementById('bg');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x070709, 1);
+  renderer.shadowMap.enabled = false;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.z = 5;
+
+  /* ---- Lighting ---- */
+  scene.add(new THREE.AmbientLight(0x222222, 2));
+
+  const key = new THREE.PointLight(0xffffff, 3, 30);
+  key.position.set(3, 4, 6);
+  scene.add(key);
+
+  const fill = new THREE.PointLight(0xffeedd, 1.5, 20);
+  fill.position.set(-4, -2, 5);
+  scene.add(fill);
+
+  const rim = new THREE.PointLight(0x334488, 1.2, 20);
+  rim.position.set(0, 0, -4);
+  scene.add(rim);
+
+  /* ---- Barber pole stripe texture ---- */
+  function buildPoleTexture () {
+    const w = 512, h = 1024;
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    const ctx = c.getContext('2d');
+
+    // Base white
+    ctx.fillStyle = '#F4F4F4';
+    ctx.fillRect(0, 0, w, h);
+
+    // Diagonal stripes — slope calculated so one full stripe set
+    // wraps exactly around the cylinder's circumference
+    // We draw parallelogram bands going from lower-left to upper-right
+    const stripeW = 96;
+    const colors = ['#CC1122', '#F2F2F2', '#001B8C', '#F2F2F2'];
+    const slope = h; // 45° mapped to texture space
+
+    for (let rep = -2; rep < 4; rep++) {
+      colors.forEach((color, i) => {
+        const x0 = (rep * stripeW * colors.length) + i * stripeW;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(x0,          0);
+        ctx.lineTo(x0 + stripeW, 0);
+        ctx.lineTo(x0 + stripeW - slope, h);
+        ctx.lineTo(x0 - slope,   h);
+        ctx.closePath();
+        ctx.fill();
+      });
+    }
+
+    // Subtle gloss highlight
+    const gloss = ctx.createLinearGradient(0, 0, w, 0);
+    gloss.addColorStop(0,   'rgba(255,255,255,0)');
+    gloss.addColorStop(0.3, 'rgba(255,255,255,.12)');
+    gloss.addColorStop(0.5, 'rgba(255,255,255,.22)');
+    gloss.addColorStop(0.7, 'rgba(255,255,255,.08)');
+    gloss.addColorStop(1,   'rgba(255,255,255,0)');
+    ctx.fillStyle = gloss;
+    ctx.fillRect(0, 0, w, h);
+
+    const tex = new THREE.CanvasTexture(c);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    return tex;
+  }
+
+  /* ---- Chrome cap texture ---- */
+  function buildCapMaterial () {
+    return new THREE.MeshStandardMaterial({
+      color: 0xCCCCCC,
+      metalness: 0.95,
+      roughness: 0.08,
+    });
+  }
+
+  /* ---- Build pole group ---- */
+  const poleGroup = new THREE.Group();
+
+  // Main cylinder
+  const poleGeo = new THREE.CylinderGeometry(0.38, 0.38, 3.6, 48, 1, false);
+  const poleMat = new THREE.MeshStandardMaterial({
+    map: buildPoleTexture(),
+    metalness: 0.05,
+    roughness: 0.4,
+  });
+  const poleMesh = new THREE.Mesh(poleGeo, poleMat);
+  poleGroup.add(poleMesh);
+
+  // Top cap
+  const capGeo = new THREE.CylinderGeometry(0.44, 0.44, 0.1, 48);
+  const topCap = new THREE.Mesh(capGeo, buildCapMaterial());
+  topCap.position.y = 1.85;
+  poleGroup.add(topCap);
+
+  // Bottom cap
+  const botCap = new THREE.Mesh(capGeo, buildCapMaterial());
+  botCap.position.y = -1.85;
+  poleGroup.add(botCap);
+
+  // Sphere finials on caps
+  const finialGeo = new THREE.SphereGeometry(0.38, 24, 24);
+  const topFinial = new THREE.Mesh(finialGeo, buildCapMaterial());
+  topFinial.position.y = 2.28;
+  poleGroup.add(topFinial);
+
+  const botFinial = new THREE.Mesh(finialGeo, buildCapMaterial());
+  botFinial.position.y = -2.28;
+  poleGroup.add(botFinial);
+
+  scene.add(poleGroup);
+
+  /* ---- Scroll & animation ---- */
+  let scrollY = 0;
+  let targetRot = 0, currentRot = 0;
+
+  window.addEventListener('scroll', () => { scrollY = window.scrollY; }, { passive: true });
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  window.addEventListener('scroll', () => {
+    const hdr = document.querySelector('header');
+    if (hdr) {
+      hdr.style.background = scrollY > 60 ? 'rgba(7,7,9,.9)' : '';
+      hdr.style.backdropFilter = scrollY > 60 ? 'blur(12px)' : '';
+      hdr.style.borderBottom = scrollY > 60 ? '1px solid rgba(237,234,227,.08)' : '';
+    }
+  }, { passive: true });
+
+  function animate () {
+    requestAnimationFrame(animate);
+    if (!prefersReduced) {
+      const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      targetRot = (scrollY / max) * Math.PI * 2;
+      currentRot += (targetRot - currentRot) * 0.1;
+      poleGroup.rotation.y = currentRot;
+    }
+    renderer.render(scene, camera);
+  }
+  animate();
+})();
+</script>
+</body>
+</html>
