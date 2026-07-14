@@ -89,7 +89,7 @@
   /* real knot logo. JS keys it to a transparent PNG at runtime; 'screen' blend is
      the fallback (drops the black ground if the JS keying can't run, e.g. file://).
      ░░ TUNE: logo size — bump these to grow the whole header lockup ░░ */
-  .logo-knot{width:50px;height:50px;display:block;object-fit:cover;object-position:center;mix-blend-mode:screen}
+  .logo-knot{width:50px;height:50px;display:block;object-fit:contain;object-position:center;mix-blend-mode:screen}
   .logo-mark{display:flex;flex-direction:column;line-height:1;font-family:"Cinzel",serif;text-transform:uppercase}
   .logo-mark .l1{font-size:23px;font-weight:700;letter-spacing:.15em;
     /* metallic silver, matching the engraved logo */
@@ -492,8 +492,8 @@
       <div class="barber-bio">
         <span class="eyebrow"></span>
         <h3>Khemchik</h3>
-        <p>I began my barbering and hairdressing journey in Moscow, where I trained as a professional hairstylist and barber. After moving to Wellington, I opened my first barbershop in 2022 and have spent the past five years refining my skills, expanding my experience, and building strong relationships with clients.</p>
-        <p>My passion is providing quality haircuts, great service, and a welcoming atmosphere where everyone feels comfortable. I look forward to helping you look and feel your best.</p>
+        <p>I'm Khemchik, and I've been cutting hair for most of my life. I trained as a hairstylist and barber in Moscow before making the move to Wellington, where I opened my own shop back in 2022. Every year since has come down to the same few things — getting a little sharper at what I do, and looking after the people who sit in my chair.</p>
+        <p>For me it was never just about the haircut. It's the conversation, the fresh-cut feeling when you walk out the door, and knowing you'll want to come back. Whether it's your first visit or your fiftieth, you'll get my full attention and a cut that actually suits you.</p>
         <ul class="barber-meta">
           <li><span class="k"></span><span class="v"></span></li>
           <li><span class="k"></span><span class="v"></span></li>
@@ -542,12 +542,8 @@
     'https://www.instagram.com/p/DM3exPxz5AR/',
     'https://www.instagram.com/p/DSTWjn9E7rs/',
     'https://www.instagram.com/p/DYqMa8ek2V7/',
-    'https://www.instagram.com/p/DVb6Ob8E8M1/',
-    'https://www.instagram.com/reel/DFUrGg3BBEx/',
-    'https://www.instagram.com/reel/DNo4hY9Tx-Z/',
-    'https://www.instagram.com/reel/DNMPL78zu7C/',
-    'https://www.instagram.com/reel/DF6NXPJh11M/',
-    'https://www.instagram.com/reel/C3eCLQ7v38q/'
+    'https://www.instagram.com/p/DVb6Ob8E8M1/'
+    // reels removed — photo posts only (reels showed a play button / reel logo)
   ];
   var HOW_MANY = 2;
 
@@ -600,8 +596,12 @@
     try{
       var S = 160, cv = document.createElement('canvas'); cv.width = cv.height = S;
       var g = cv.getContext('2d');
-      var iw = img.naturalWidth, ih = img.naturalHeight, s = Math.min(iw, ih);
-      g.drawImage(img, (iw-s)/2, (ih-s)/2, s, s, 0, 0, S, S);
+      // CONTAIN-fit the whole knot into the square (source JPG is portrait, so a
+      // centred square crop was clipping the top/bottom of the knot). Transparent
+      // margins luminance-key to alpha 0, so no dark box appears.
+      var iw = img.naturalWidth, ih = img.naturalHeight, fit = Math.min(S/iw, S/ih);
+      var dw = iw*fit, dh = ih*fit;
+      g.drawImage(img, 0, 0, iw, ih, (S-dw)/2, (S-dh)/2, dw, dh);
       var im = g.getImageData(0,0,S,S), d = im.data;
       for(var i=0;i<d.length;i+=4){
         var l = d[i]*0.299 + d[i+1]*0.587 + d[i+2]*0.114;
@@ -729,12 +729,15 @@
     knot.onload = function(){
       try {
         var pad = N * 0.12, sz = N - pad * 2;     // knot inset, leaving gaps
-        var iw = knot.naturalWidth, ih = knot.naturalHeight, s = Math.min(iw, ih);
-        // draw the centred knot square, then turn its black ground transparent via
-        // luminance → alpha so only the silver knot remains (no dark squares)
+        var iw = knot.naturalWidth, ih = knot.naturalHeight;
+        // CONTAIN-fit the whole knot into the inset box (source JPG is portrait, so
+        // a centred square crop was clipping the top/bottom of the knot), then turn
+        // its black ground transparent via luminance → alpha so only the silver knot
+        // remains (no dark squares)
+        var fit = Math.min(sz/iw, sz/ih), dw = iw*fit, dh = ih*fit;
         var tmp = document.createElement('canvas'); tmp.width = tmp.height = N;
         var tg = tmp.getContext('2d');
-        tg.drawImage(knot, (iw-s)/2, (ih-s)/2, s, s, pad, pad, sz, sz);
+        tg.drawImage(knot, 0, 0, iw, ih, pad+(sz-dw)/2, pad+(sz-dh)/2, dw, dh);
         var im = tg.getImageData(0,0,N,N), d = im.data;   // throws if tainted (file://)
         for(var i=0;i<d.length;i+=4){
           var lum = d[i]*0.299 + d[i+1]*0.587 + d[i+2]*0.114;
