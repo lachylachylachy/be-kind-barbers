@@ -69,6 +69,8 @@
   /* ---- type ---- */
   .display{font-family:"Archivo",system-ui,sans-serif;font-weight:900;letter-spacing:-.01em;line-height:.92;text-transform:uppercase;text-shadow:var(--title-shadow)}
   .eyebrow{font-family:"Archivo",sans-serif;font-weight:700;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--accent)}
+  /* hero location slogan — italic tagline under the eyebrow */
+  .hero-loc{margin:10px 0 0;font-size:clamp(15px,1.7vw,18px);color:var(--bone);font-style:italic;font-weight:400;text-wrap:balance}
   .label{font-family:"Archivo",sans-serif;font-weight:600;font-size:13px;letter-spacing:.16em;text-transform:uppercase}
 
   /* ---- header ---- */
@@ -89,14 +91,14 @@
   /* real knot logo. JS keys it to a transparent PNG at runtime; 'screen' blend is
      the fallback (drops the black ground if the JS keying can't run, e.g. file://).
      ░░ TUNE: logo size — bump these to grow the whole header lockup ░░ */
-  .logo-knot{width:50px;height:50px;display:block;object-fit:contain;object-position:center;mix-blend-mode:screen}
+  .logo-knot{width:66px;height:66px;display:block;object-fit:contain;object-position:center;mix-blend-mode:screen}
   .logo-mark{display:flex;flex-direction:column;line-height:1;font-family:"Cinzel",serif;text-transform:uppercase}
   .logo-mark .l1{font-size:23px;font-weight:700;letter-spacing:.15em;
     /* metallic silver, matching the engraved logo */
     background:linear-gradient(180deg,#f5f6f8 0%,#c4c8ce 55%,#9aa0a8 100%);
     -webkit-background-clip:text;background-clip:text;color:transparent}
   .logo-mark .l2{font-size:11.5px;font-weight:600;letter-spacing:.40em;color:var(--smoke);margin-top:4px;padding-left:.06em}
-  @media (max-width:560px){ .logo-knot{width:40px;height:40px} .logo-mark .l1{font-size:18px} .logo-mark .l2{font-size:9px;letter-spacing:.34em} }
+  @media (max-width:560px){ .logo-knot{width:52px;height:52px} .logo-mark .l1{font-size:18px} .logo-mark .l2{font-size:9px;letter-spacing:.34em} }
 
   /* ---- buttons ----
      ░░ TUNE: book btn — change --book-pad / --book-font to resize the Book Now button ░░ */
@@ -137,7 +139,7 @@
     background:var(--ink);}
   .hero-grad{position:absolute;inset:0;z-index:2;pointer-events:none;
     background:linear-gradient(90deg, rgba(26,26,28,.82) 0%, rgba(26,26,28,.42) 44%, transparent 76%)}
-  .hero-inner{position:relative;z-index:3;width:100%;padding-top:80px}
+  .hero-inner{position:relative;z-index:3;width:100%;padding-top:54px}
   /* ░░ TUNE: title — base headline size (clamp). The two lines scale off this:
         .t-top ("be kind") is bigger · .t-bot ("barbers.") is smaller ░░ */
   .hero h1{font-size:clamp(46px,8.5vw,108px);margin:18px 0 0;color:var(--bone);
@@ -164,11 +166,12 @@
   /* ---- hero entrance ---- */
   @keyframes heroFadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
   .hero .eyebrow{animation:heroFadeUp .7s cubic-bezier(.2,.8,.2,1) .15s backwards}
-  .hero h1{animation:heroFadeUp .9s cubic-bezier(.2,.8,.2,1) .3s backwards}
+  .hero .hero-loc{animation:heroFadeUp .7s cubic-bezier(.2,.8,.2,1) .3s backwards}
+  .hero h1{animation:heroFadeUp .9s cubic-bezier(.2,.8,.2,1) .42s backwards}
   .hero .lede{animation:heroFadeUp .7s cubic-bezier(.2,.8,.2,1) .55s backwards}
   .hero .hero-cta{animation:heroFadeUp .7s cubic-bezier(.2,.8,.2,1) .75s backwards}
   .hero .scrollcue{animation:heroFadeUp .7s cubic-bezier(.2,.8,.2,1) 1s backwards}
-  @media(prefers-reduced-motion:reduce){.hero .eyebrow,.hero h1,.hero .lede,.hero .hero-cta,.hero .scrollcue{animation:none}}
+  @media(prefers-reduced-motion:reduce){.hero .eyebrow,.hero .hero-loc,.hero h1,.hero .lede,.hero .hero-cta,.hero .scrollcue{animation:none}}
 
   /* ---- scroll arrow ---- */
   @keyframes arrowBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
@@ -341,6 +344,8 @@
     <div class="wrap">
       <!-- EDIT: copy -->
       <span class="eyebrow">Taranaki Street · Wellington · Est. 2026</span>
+      <!-- EDIT: location slogan — shop is on the Wakefield/Taranaki corner -->
+      <p class="hero-loc">On the corner of Taranaki &amp; Wakefield St.</p>
       <h1 class="display"><span class="t-top">be kind</span><span class="t-bot"><span class="accent">barbers</span>.</span></h1>
       <p class="lede"><em>Transformation</em> begins, with the next cut.</p>
       <div class="hero-cta">
@@ -437,6 +442,8 @@
         <h3>Location</h3>
         <p>182C Wakefield Street</p>
         <p>Te Aro, Wellington 6011</p>
+        <!-- EDIT: corner note — shop is on the Wakefield/Taranaki corner, frontage on the Taranaki St side -->
+        <p style="margin-top:6px;font-size:14px;color:var(--smoke)">On the corner of Wakefield &amp; Taranaki St — find us on the Taranaki Street side.</p>
         <!-- EDIT: phone — add the shop number here, or leave the IG DM line below -->
         <p style="margin-top:14px"><a href="https://instagram.com/khemchikbarber" target="_blank" rel="noopener">DM @khemchikbarber</a></p>
         <a class="map" href="https://maps.google.com/?q=182C+Wakefield+Street+Te+Aro+Wellington" target="_blank" rel="noopener">Open in Maps →</a>
@@ -598,8 +605,11 @@
       var g = cv.getContext('2d');
       // CONTAIN-fit the whole knot into the square (source JPG is portrait, so a
       // centred square crop was clipping the top/bottom of the knot). Transparent
-      // margins luminance-key to alpha 0, so no dark box appears.
-      var iw = img.naturalWidth, ih = img.naturalHeight, fit = Math.min(S/iw, S/ih);
+      // margins luminance-key to alpha 0, so no dark box appears. KNOT_ZOOM scales
+      // the knot up so it fills more of the frame (the empty top/bottom margins of
+      // the portrait get cropped, not the knot). ░░ EDIT: knot size — 1 = fit, 1.5 = +50% ░░
+      var KNOT_ZOOM = 1.5;
+      var iw = img.naturalWidth, ih = img.naturalHeight, fit = Math.min(S/iw, S/ih) * KNOT_ZOOM;
       var dw = iw*fit, dh = ih*fit;
       g.drawImage(img, 0, 0, iw, ih, (S-dw)/2, (S-dh)/2, dw, dh);
       var im = g.getImageData(0,0,S,S), d = im.data;
@@ -733,8 +743,11 @@
         // CONTAIN-fit the whole knot into the inset box (source JPG is portrait, so
         // a centred square crop was clipping the top/bottom of the knot), then turn
         // its black ground transparent via luminance → alpha so only the silver knot
-        // remains (no dark squares)
-        var fit = Math.min(sz/iw, sz/ih), dw = iw*fit, dh = ih*fit;
+        // remains (no dark squares). KNOT_ZOOM scales the knot up so it fills more of
+        // each pole cell (empty portrait margins get cropped, not the knot).
+        // ░░ EDIT: pole knot size — 1 = fit, 1.5 = +50% ░░
+        var KNOT_ZOOM = 1.5;
+        var fit = Math.min(sz/iw, sz/ih) * KNOT_ZOOM, dw = iw*fit, dh = ih*fit;
         var tmp = document.createElement('canvas'); tmp.width = tmp.height = N;
         var tg = tmp.getContext('2d');
         tg.drawImage(knot, 0, 0, iw, ih, pad+(sz-dw)/2, pad+(sz-dh)/2, dw, dh);
