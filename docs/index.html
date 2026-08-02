@@ -13,7 +13,7 @@
        "TUNE: book btn" → size / prominence of the Book Now button
        "TUNE: shadows"  → depth / glow strength on cards & buttons
        "EDIT: copy"     → hero wording      "EDIT: details" → prices/hours/address
-       "EDIT: timely"   → booking widget    "EDIT: instagram" → IG posts
+       "EDIT: booking"  → booking link      "EDIT: instagram" → IG posts
        "EDIT: barber"   → barber photo + bio
      ============================================================ -->
 <title>Be Kind Barbers — Wellington</title>
@@ -33,6 +33,8 @@
     --accent:#8FB8E0;     /* CALMING light blue — primary pop (replaces the old red) */
     --accent-dim:#6E97C4; /* darker accent for hovers */
     --accent-2:#7FC7D6;   /* soft teal — quiet secondary accent for links */
+    --gold:#C9A64E;       /* GOLD — Book Now button fill (background only) */
+    --gold-dim:#AD8A3A;   /* darker gold for Book Now hover */
     --line:rgba(236,236,238,.12);
     --maxw:1180px;
 
@@ -42,6 +44,8 @@
     --sh-lift:0 10px 24px rgba(0,0,0,.50), 0 32px 72px rgba(0,0,0,.62), inset 0 1px 0 rgba(255,255,255,.08);
     --sh-btn:0 6px 18px rgba(143,184,224,.30), 0 16px 44px rgba(143,184,224,.20);
     --sh-btn-hover:0 10px 26px rgba(143,184,224,.42), 0 24px 60px rgba(143,184,224,.30);
+    --sh-gold:0 6px 18px rgba(201,166,78,.32), 0 16px 44px rgba(201,166,78,.20);
+    --sh-gold-hover:0 10px 26px rgba(201,166,78,.44), 0 24px 60px rgba(201,166,78,.32);
     --title-shadow:0 2px 22px rgba(0,0,0,.60);          /* soft shadow behind headlines */
     --icon-shadow:0 1px 6px rgba(0,0,0,.5);
   }
@@ -107,17 +111,23 @@
     --book-font:13px;
     font-family:"Archivo",sans-serif;font-weight:800;font-size:var(--book-font);
     letter-spacing:.16em;text-transform:uppercase;
-    color:var(--ink);background:var(--accent);
+    display:inline-block;text-align:center;
+    /* Book Now buttons are GOLD (background only) site-wide */
+    color:var(--ink);background:var(--gold);
     padding:var(--book-pad);border:none;border-radius:3px;cursor:pointer;
     position:relative;overflow:hidden;
     transition:transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease, background .25s ease;
-    box-shadow:var(--sh-btn);
+    box-shadow:var(--sh-gold);
   }
-  .book-btn:hover{transform:translateY(-2px);background:var(--accent-dim);box-shadow:var(--sh-btn-hover)}
+  .book-btn:hover{transform:translateY(-2px);background:var(--gold-dim);box-shadow:var(--sh-gold-hover)}
   .book-btn:active{transform:translateY(0) scale(.985)}
   .book-btn:focus-visible{outline:2px solid var(--bone);outline-offset:3px}
   .book-btn .sheen{position:absolute;inset:0;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-120%)}
   .book-btn:hover .sheen{transform:translateX(120%);transition:transform .7s ease}
+  /* BLUE variant — "See our services": identical treatment to the old Book Now
+     (blue fill + blue glow + same hover). Rules sit AFTER the gold hover so they win. */
+  .book-btn--blue{background:var(--accent);box-shadow:var(--sh-btn)}
+  .book-btn--blue:hover{background:var(--accent-dim);box-shadow:var(--sh-btn-hover)}
   /* the hero's primary CTA — the focal point of the page */
   .book-btn--hero{--book-pad:24px 64px;--book-font:16px;border-radius:4px}
 
@@ -158,6 +168,11 @@
     filter:blur(7px)}
   .hero .lede em{color:var(--accent);font-style:italic}
   .hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:38px;align-items:center}
+  /* Book now (gold) + See our services (blue) — equal-sized, side by side.
+     Grid 1fr 1fr under width:max-content makes BOTH columns the width of the
+     wider button, so the two are identical and the longer label never wraps. */
+  .cta-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:max-content;max-width:100%}
+  .cta-pair .book-btn{width:100%}
   .scrollcue{margin-top:50px;display:flex;align-items:center;gap:12px;color:var(--smoke)}
   .scrollcue .ln{width:46px;height:1px;background:var(--accent);opacity:.7;animation:cue 2.4s ease-in-out infinite}
   @keyframes cue{0%,100%{transform:scaleX(.4);opacity:.3;transform-origin:left}50%{transform:scaleX(1);opacity:.8;transform-origin:left}}
@@ -190,7 +205,14 @@
     padding:22px 0;border-bottom:1px solid var(--line)}
   .svc-row .n{font-family:"Archivo",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:17px;color:var(--bone)}
   .svc-row .d{color:var(--smoke);font-size:15px;flex:1;padding:0 18px}
-  .svc-row .p{font-family:"Archivo",sans-serif;font-weight:800;color:var(--accent);font-size:18px;white-space:nowrap}
+  .svc-row .p{font-family:"Archivo",sans-serif;font-weight:800;color:var(--accent);font-size:18px;white-space:nowrap;transition:color .2s ease}
+  /* clickable rows → booking. Subtle hover affordance. */
+  a.svc-row{cursor:pointer;transition:background .2s ease,padding .2s ease}
+  a.svc-row .n{transition:color .2s ease}
+  a.svc-row:hover{background:rgba(143,184,224,.06);padding-left:14px;padding-right:14px}
+  a.svc-row:hover .n{color:var(--accent)}
+  a.svc-row:hover .p{color:var(--bone)}
+  a.svc-row:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   .svc-col{padding:0 40px}
   .svc-col:first-child{padding-left:0;border-right:1px solid var(--line)}
   .svc-col:last-child{padding-right:0}
@@ -264,11 +286,20 @@
     gap:18px;background:linear-gradient(180deg,var(--panel2),var(--panel));color:var(--smoke);text-align:center;padding:40px}
   .frame-fallback .label{color:var(--bone)}
   @media (max-width:760px){.frame-inner iframe{height:680px}}
+  /* booking CTA — the new provider (timetobook.co.nz) blocks iframe embedding, so
+     the panel holds a prominent "open booking page" button instead of an embed */
+  .book-cta{display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;padding:72px 32px}
+  .book-cta .label{color:var(--bone);font-family:"Archivo",sans-serif;font-weight:600;font-size:14px;letter-spacing:.16em;text-transform:uppercase}
+  .book-cta p{color:var(--smoke);max-width:44ch;margin:0}
+  @media (max-width:640px){.book-cta{padding:52px 20px}}
 
   /* ---- meet the barber ---- */
   #barber{scroll-margin-top:84px}
+  /* team stack — one row per barber, identical photo size for every member */
+  .team-stack{display:flex;flex-direction:column;gap:80px}
+  @media (max-width:760px){.team-stack{gap:52px}}
   .barber{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center}
-  .barber-photo{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:4/5;background:var(--panel2);
+  .barber-photo{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:3/5;background:var(--panel2);
     box-shadow:var(--sh-lift)}
   .barber-photo img{width:100%;height:100%;object-fit:cover;display:block}
   .barber-photo .photo-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
@@ -314,6 +345,10 @@
     .hero-inner .wrap{text-align:center}
     .hero .lede{margin-left:auto;margin-right:auto}
     .hero-cta{flex-direction:column;align-items:stretch;justify-content:center;gap:12px;margin-top:30px}
+    /* Book now + See our services stay side-by-side (equal halves); Meet your
+       barber drops onto its own line below the pair */
+    .hero-cta .cta-pair{width:100%;gap:10px}
+    .hero-cta .cta-pair .book-btn--hero{--book-pad:16px 8px;--book-font:12px;letter-spacing:.06em}
     .hero-cta .book-btn--hero{--book-pad:22px 28px;--book-font:16px;width:100%}
     .hero-cta .book-ghost{width:100%;text-align:center;padding:13px 18px}
     .scrollcue{justify-content:center}
@@ -331,9 +366,9 @@
     <img class="logo-knot" src="assets/be-kind-knot.jpg" alt="" aria-hidden="true">
     <span class="logo-mark"><span class="l1">Be Kind</span><span class="l2">Barbers</span></span>
   </a>
-  <button class="book-btn" data-scroll="#book" aria-label="Book an appointment">
+  <a class="book-btn" href="https://timetobook.co.nz/book/be-kind-barbers" aria-label="Book an appointment">
     <span class="sheen"></span>Book Now
-  </button>
+  </a>
 </header>
 
 <a id="top"></a>
@@ -350,8 +385,10 @@
       <p class="lede"><em>Transformation</em> begins, with the next cut.</p>
       <div class="hero-cta">
         <!-- focal CTA: see "TUNE: book btn" to resize -->
-        <button class="book-btn book-btn--hero" data-scroll="#book"><span class="sheen"></span>Book now</button>
-        <a class="book-ghost" data-scroll="#prices" href="#prices">See our services</a>
+        <div class="cta-pair">
+          <a class="book-btn book-btn--hero" href="https://timetobook.co.nz/book/be-kind-barbers"><span class="sheen"></span>Book now</a>
+          <a class="book-btn book-btn--hero book-btn--blue" data-scroll="#prices" href="#prices"><span class="sheen"></span>See our services</a>
+        </div>
         <a class="book-ghost" data-scroll="#barber" href="#barber">Meet your barber</a>
       </div>
       <div class="scrollcue"><span class="ln"></span><span class="scroll-arrow">↓</span></div>
@@ -366,21 +403,21 @@
       <h2 class="display">Services</h2>
     </div>
     <!-- EDIT: details (prices) -->
+    <!-- each row links to the booking page (opens in the same tab) -->
     <div class="svc reveal">
       <div class="svc-col">
-        <div class="svc-row"><span class="n">Haircut</span><span class="d">30 min</span><span class="p">$50</span></div>
-        <div class="svc-row"><span class="n">Beard Trim (Solo)</span><span class="d">15 min</span><span class="p">$25</span></div>
-        <div class="svc-row"><span class="n">Full Haircut & Beard</span><span class="d">45 min</span><span class="p">$65</span></div>
-        <div class="svc-row"><span class="n">Skin Fade</span><span class="d">45 min</span><span class="p">$60</span></div>
-        <div class="svc-row"><span class="n">Skin Fade & Beard</span><span class="d">50 min</span><span class="p">$75</span></div>
-        <div class="svc-row"><span class="n">Burst Fade</span><span class="d">45 min</span><span class="p">$60</span></div>
+        <a class="svc-row" href="https://timetobook.co.nz/book/be-kind-barbers" aria-label="Book Haircut — $50"><span class="n">Haircut</span><span class="d">30 min</span><span class="p">$50</span></a>
+        <a class="svc-row" href="https://timetobook.co.nz/book/be-kind-barbers" aria-label="Book Beard Trim (Solo) — $25"><span class="n">Beard Trim (Solo)</span><span class="d">15 min</span><span class="p">$25</span></a>
+        <a class="svc-row" href="https://timetobook.co.nz/book/be-kind-barbers" aria-label="Book Full Haircut & Beard — $65"><span class="n">Full Haircut & Beard</span><span class="d">45 min</span><span class="p">$65</span></a>
+        <a class="svc-row" href="https://timetobook.co.nz/book/be-kind-barbers" aria-label="Book Skin Fade — $60"><span class="n">Skin Fade</span><span class="d">45 min</span><span class="p">$60</span></a>
+        <a class="svc-row" href="https://timetobook.co.nz/book/be-kind-barbers" aria-label="Book Burst Fade — $60"><span class="n">Burst Fade</span><span class="d">45 min</span><span class="p">$60</span></a>
       </div>
       <div class="svc-col">
-        <div class="svc-row"><span class="n">Taper Fade</span><span class="d">40 min</span><span class="p">$50</span></div>
-        <div class="svc-row"><span class="n">Buzz Cut</span><span class="d">15 min</span><span class="p">$25</span></div>
-        <div class="svc-row"><span class="n">Razor Cut</span><span class="d">30 min</span><span class="p">$50</span></div>
-        <div class="svc-row"><span class="n">Scissor Cut</span><span class="d">30 min</span><span class="p">$50</span></div>
-        <div class="svc-row"><span class="n">Kids Under 16</span><span class="d">30 min</span><span class="p">$40</span></div>
+        <a class="svc-row" href="https://timetobook.co.nz/book/be-kind-barbers" aria-label="Book Taper Fade — $50"><span class="n">Taper Fade</span><span class="d">40 min</span><span class="p">$50</span></a>
+        <a class="svc-row" href="https://timetobook.co.nz/book/be-kind-barbers" aria-label="Book Buzz Cut — $25"><span class="n">Buzz Cut</span><span class="d">15 min</span><span class="p">$25</span></a>
+        <a class="svc-row" href="https://timetobook.co.nz/book/be-kind-barbers" aria-label="Book Razor Cut — $50"><span class="n">Razor Cut</span><span class="d">30 min</span><span class="p">$50</span></a>
+        <a class="svc-row" href="https://timetobook.co.nz/book/be-kind-barbers" aria-label="Book Scissor Cut — $50"><span class="n">Scissor Cut</span><span class="d">30 min</span><span class="p">$50</span></a>
+        <a class="svc-row" href="https://timetobook.co.nz/book/be-kind-barbers" aria-label="Book Kids Under 16 — $40"><span class="n">Kids Under 16</span><span class="d">30 min</span><span class="p">$40</span></a>
       </div>
     </div>
   </div>
@@ -434,7 +471,7 @@
           <li><span>Thurs</span><span>9:00am — 6:00pm</span></li>
           <li><span>Friday</span><span>9:00am — 6:00pm</span></li>
           <li><span>Saturday</span><span>10:00am — 5:00pm</span></li>
-          <li><span>Sunday</span><span>Closed</span></li>
+          <li><span>Sunday</span><span>10:00am — 4:00pm</span></li>
         </ul>
       </div>
       <!-- EDIT: details (address + phone + map link) -->
@@ -459,19 +496,14 @@
       <h2 class="display">Book here</h2>
     </div>
     <div class="book-frame reveal">
-      <!-- <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="lab"></span></div> -->
-      <div class="frame-inner">
-        <!-- EDIT: timely — live booking page. (If Timely blocks embedding, the
-             fallback below links straight to it — that always works.) -->
-        <iframe id="timely" title="Book an appointment at Be Kind Barbers"
-          src="https://bookings.gettimely.com/bekindtoyourself/bb/book"
-          loading="lazy"
-          onload="this.parentNode.querySelector('.frame-fallback')?.remove()"></iframe>
-        <div class="frame-fallback">
-          <span class="label" style="font-family:'Archivo',sans-serif;letter-spacing:.16em;text-transform:uppercase;font-size:13px">Book your appointment</span>
-          <span style="max-width:34ch">Pick a service and time on Timely — secure, instant confirmation.</span>
-          <a class="book-ghost" href="https://bookings.gettimely.com/bekindtoyourself/bb/book" target="_blank" rel="noopener">Open booking page →</a>
-        </div>
+      <!-- EDIT: booking — provider is timetobook.co.nz. Its pages send
+           X-Frame-Options: SAMEORIGIN, so they CANNOT be embedded in an iframe here;
+           this CTA opens the live booking page in a new tab (always works).
+           To change the link, edit both hrefs below. -->
+      <div class="book-cta">
+        <span class="label">Book your appointment</span>
+        <p>Pick your barber, service and time online — secure, instant confirmation.</p>
+        <a class="book-btn book-btn--hero" href="https://timetobook.co.nz/book/be-kind-barbers"><span class="sheen"></span>Open booking page →</a>
       </div>
     </div>
   </div>
@@ -483,9 +515,31 @@
     <div class="sec-head reveal">
       <h2 class="display">The team</h2>
     </div>
+    <div class="team-stack">
+    <!-- ══ BARBER 1 — Ruby ══
+         PHOTO → docs/assets/ruby.jpg   ·   auto-cropped to the shared 3:5 frame. -->
     <div class="barber reveal">
-      <!-- EDIT: barber (photo) — drop a portrait in the img src below.
-           Recommended: a clean, well-lit portrait, roughly 4:5 (e.g. 900×1125). -->
+      <div class="barber-photo">
+        <img src="assets/ruby.jpg"
+          alt="Portrait of Ruby, barber at Be Kind Barbers"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="photo-fallback" style="display:none">
+          <span class="mono">BK</span>
+          <span style="font-family:'Archivo',sans-serif;letter-spacing:.16em;text-transform:uppercase;font-size:12px">Add barber portrait → assets/ruby.jpg</span>
+        </div>
+      </div>
+      <div class="barber-bio">
+        <span class="eyebrow">they / them</span>
+        <h3>Ruby</h3>
+        <p>Ko Ruby ahau. I'm a takatāpui barber originally from Tāpora, now residing in Te Whanganui a Tara, Wellington. I have a Certificate in Commercial Barbering from Whitireia and have been providing mobile barber services to the region for over the past year!</p>
+        <p>I understand that finding a queer barber can be hard — that's why I'm so passionate about providing an accessible, safe space, especially to queer, trans, and neurodivergent clients. I love giving gender-affirming cuts and really take my time to understand and execute your vision.</p>
+        <p>Feel free to check out my Facebook page <strong style="color:var(--bone);font-weight:600">Rhubarber</strong> or Instagram <a href="https://www.instagram.com/rhu.barber" target="_blank" rel="noopener" style="color:var(--accent-2);border-bottom:1px solid rgba(127,199,214,.4)">@rhu.barber</a> and show some support — my DMs are always open, even if you just have a question 😊</p>
+        <a class="book-btn" href="https://timetobook.co.nz/book/be-kind-barbers"><span class="sheen"></span>Book with Ruby</a>
+      </div>
+    </div>
+
+    <!-- ══ BARBER 2 — Khemchik ══ -->
+    <div class="barber reveal">
       <div class="barber-photo">
         <img src="assets/IMG_6100.jpg"
           alt="Portrait of Khemchik"
@@ -495,7 +549,6 @@
           <span style="font-family:'Archivo',sans-serif;letter-spacing:.16em;text-transform:uppercase;font-size:12px">Add barber portrait</span>
         </div>
       </div>
-      <!-- EDIT: barber (name + bio) -->
       <div class="barber-bio">
         <span class="eyebrow"></span>
         <h3>Khemchik</h3>
@@ -505,8 +558,9 @@
           <li><span class="k"></span><span class="v"></span></li>
           <li><span class="k"></span><span class="v"></span></li>
         </ul>
-        <button class="book-btn" data-scroll="#book"><span class="sheen"></span>Book with Khemchik</button>
+        <a class="book-btn" href="https://timetobook.co.nz/book/be-kind-barbers"><span class="sheen"></span>Book with Khemchik</a>
       </div>
+    </div>
     </div>
   </div>
 </section>
@@ -516,12 +570,12 @@
     <div class="foot">
       <div>
         <span class="brand">Be Kind <b style="color:var(--accent)">·</b> Barbers</span>
-        <p style="margin-top:10px;font-size:14px">Te Aro, Wellington. Walk-ins available.</p>
+        <p style="margin-top:10px;font-size:14px">Te Aro, Wellington. Open 7 days · walk-ins available.</p>
         <p style="margin-top:6px;font-size:14px;color:var(--smoke)"><a href="https://instagram.com/bekindbarbers" target="_blank" rel="noopener">DM @bekindbarbers</a></p>
       </div>
       <div style="text-align:right;font-size:14px">
         <p><a href="tel:+642108276834">+64-21-082-76834</a></p>
-        <p style="margin-top:4px"><a href="#book" data-scroll="#book">Book online →</a></p>
+        <p style="margin-top:4px"><a href="https://timetobook.co.nz/book/be-kind-barbers">Book online →</a></p>
       </div>
     </div>
     <p class="foot-credit">imagined by lachy</p>
