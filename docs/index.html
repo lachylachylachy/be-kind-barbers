@@ -309,6 +309,8 @@
   .barber-bio h3{font-family:"Archivo",sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:-.01em;
     font-size:clamp(30px,4.4vw,46px);line-height:.96;color:var(--bone);margin-bottom:20px;text-shadow:var(--title-shadow)}
   .barber-bio p{color:var(--smoke);max-width:60ch;margin-bottom:16px;text-wrap:pretty}
+  /* consistent gap between bio and the Book button (both barbers) */
+  .barber-bio .book-btn{margin-top:14px}
   .barber-meta{list-style:none;display:flex;gap:28px;flex-wrap:wrap;margin:22px 0 30px}
   .barber-meta li{display:flex;flex-direction:column;gap:4px}
   .barber-meta .k{font-family:"Archivo",sans-serif;font-weight:800;font-size:22px;color:var(--accent)}
@@ -331,7 +333,10 @@
   @media (max-width:640px){
     header{padding:12px 18px}
     .brand{font-size:15px;letter-spacing:.12em}
-    .band{padding:64px 0}
+    /* tighter top gap between each section's line and its heading on mobile */
+    .band{padding:46px 0 60px}
+    /* a little bigger hero title on mobile */
+    .hero h1{font-size:clamp(52px,14vw,66px)}
     .wrap{padding:0 18px}
     /* on mobile the pole sits behind centred text — swap the left-to-right
        gradient for a vertical scrim so titles/CTAs stay legible over the stripes */
@@ -554,10 +559,6 @@
         <h3>Khemchik</h3>
         <p>I'm Khemchik, and I've been cutting hair for most of my life. I trained as a hairstylist and barber in Moscow before making the move to Wellington, where I opened my own shop back in 2022. Every year since has come down to the same few things — getting a little sharper at what I do, and looking after the people who sit in my chair.</p>
         <p>For me it was never just about the haircut. It's the conversation, the fresh-cut feeling when you walk out the door, and knowing you'll want to come back. Whether it's your first visit or your fiftieth, you'll get my full attention and a cut that actually suits you.</p>
-        <ul class="barber-meta">
-          <li><span class="k"></span><span class="v"></span></li>
-          <li><span class="k"></span><span class="v"></span></li>
-        </ul>
         <a class="book-btn" href="https://timetobook.co.nz/book/be-kind-barbers"><span class="sheen"></span>Book with Khemchik</a>
       </div>
     </div>
@@ -578,7 +579,7 @@
         <p style="margin-top:4px"><a href="https://timetobook.co.nz/book/be-kind-barbers">Book online →</a></p>
       </div>
     </div>
-    <p class="foot-credit">imagined by lachy</p>
+    <p class="foot-credit">created by lachy.</p>
   </div>
 </footer>
 
@@ -711,7 +712,10 @@
     var el = document.querySelector(sel);
     if(!el) return;
     var offset = hdr.offsetHeight + 14;
-    var y = el.getBoundingClientRect().top + window.pageYOffset - offset;
+    // land at the section's HEADING (skip its empty top padding) so we arrive on
+    // the content rather than in the blank band above it
+    var padTop = parseFloat(getComputedStyle(el).paddingTop) || 0;
+    var y = el.getBoundingClientRect().top + window.pageYOffset - offset + padTop;
     smoothTo(y, 1500);                 // ░░ TUNE: scroll speed (ms) ░░
     if(sel === '#book'){               // re-trigger arrival lift/glow
       book.classList.remove('arrive');
