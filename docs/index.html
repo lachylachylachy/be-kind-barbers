@@ -67,7 +67,7 @@
     background:
       radial-gradient(72% 56% at 78% 18%, var(--glow-1), transparent 60%),
       radial-gradient(64% 52% at 12% 80%, var(--glow-2), transparent 62%);}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;position:relative;z-index:3}
   a{color:inherit;text-decoration:none}
 
   /* ---- type ---- */
@@ -77,17 +77,29 @@
   .hero-loc{margin:10px 0 0;font-size:clamp(15px,1.7vw,18px);color:var(--bone);font-style:italic;font-weight:400;text-wrap:balance}
   .label{font-family:"Archivo",sans-serif;font-weight:600;font-size:13px;letter-spacing:.16em;text-transform:uppercase}
 
+  /* ---- closure banner ---- TUNE: banner — colour / copy for temporary closures etc. */
+  .closure-banner{
+    position:fixed;top:0;left:0;right:0;z-index:60;
+    background:#E8B13A;color:#1A1A1C;
+    font-family:"Archivo",sans-serif;font-weight:700;font-size:13px;letter-spacing:.04em;
+    text-align:center;padding:10px 18px;line-height:1.4;
+    box-shadow:0 2px 14px rgba(0,0,0,.35);
+  }
+  .closure-banner strong{font-weight:800}
+  body.has-banner header{top:var(--banner-h,42px)}
+  body.has-banner .hero{padding-top:var(--banner-h,42px)}
+  @media (max-width:560px){ .closure-banner{font-size:12px;padding:10px 14px} }
+
   /* ---- header ---- */
   header{
     position:fixed;top:0;left:0;right:0;z-index:50;
     display:flex;align-items:center;justify-content:space-between;
     padding:16px 24px;
     background:linear-gradient(to bottom, rgba(26,26,28,.92), rgba(26,26,28,0));
-    backdrop-filter:blur(2px);
     transition:background .3s ease, padding .3s ease, border-color .3s ease;
     border-bottom:0px solid transparent;
   }
-  header.solid{background:rgba(26,26,28,.92);border-bottom-color:var(--line);padding:12px 24px}
+  header.solid{background:linear-gradient(to bottom, rgba(26,26,28,.62) 0%, rgba(26,26,28,.38) 55%, rgba(26,26,28,0) 100%);border-bottom-color:transparent;padding:12px 24px}
   .brand{font-family:"Archivo",sans-serif;font-weight:800;font-size:18px;letter-spacing:.18em;text-transform:uppercase;color:var(--bone);text-shadow:var(--sh-soft)}
   .brand b{color:var(--accent);font-weight:800}
   /* ---- header logo lockup (eternal knot + engraved Cinzel wordmark) ---- */
@@ -95,7 +107,7 @@
   /* real knot logo. JS keys it to a transparent PNG at runtime; 'screen' blend is
      the fallback (drops the black ground if the JS keying can't run, e.g. file://).
      ░░ TUNE: logo size — bump these to grow the whole header lockup ░░ */
-  .logo-knot{width:66px;height:66px;display:block;object-fit:contain;object-position:center;mix-blend-mode:screen}
+  .logo-knot{width:66px;height:66px;display:block;object-fit:contain;object-position:center}
   .logo-mark{display:flex;flex-direction:column;line-height:1;font-family:"Cinzel",serif;text-transform:uppercase}
   .logo-mark .l1{font-size:23px;font-weight:700;letter-spacing:.15em;
     /* metallic silver, matching the engraved logo */
@@ -149,6 +161,87 @@
     background:var(--ink);}
   .hero-grad{position:absolute;inset:0;z-index:2;pointer-events:none;
     background:linear-gradient(90deg, rgba(26,26,28,.82) 0%, rgba(26,26,28,.42) 44%, transparent 76%)}
+
+  /* ---- review pills — small floating Google-review chips, scattered across
+     several sections (every section is already position:relative, see "section{}"
+     below). Each sits above that section's background but below its real content
+     (z-index 2), pointer-events:none throughout so clicks always pass through to
+     whatever's underneath. ░░ EDIT: reviews — swap quotes/stat/position/tilt below ░░
+     Opacity + a slight vertical drift are driven continuously by scroll position
+     (see the "review pill drift" script near the bottom of the page), not a one-off
+     reveal-on-scroll — so they stay live the whole time you're on the page, including
+     during the smooth-scroll button clicks, instead of firing once and sitting still.
+     Each pill carries its own --tilt (rotation) and --op (its own base opacity, read
+     by that script) as inline custom properties, for a bit of per-pill variation. */
+  .review-pills{position:absolute;inset:0;z-index:2;pointer-events:none}
+  /* styled like an actual Google review card: white surface, gold star row,
+     grey sans-serif body — instantly reads as "Google review", not a generic quote */
+  .r-pill{position:absolute;max-width:205px;padding:10px 14px;border-radius:10px;
+    background:rgba(255,255,255,.85);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+    box-shadow:0 1px 2px rgba(0,0,0,.28),0 6px 18px rgba(0,0,0,.22);
+    font-family:"Archivo",sans-serif;font-size:11.5px;line-height:1.4;
+    color:#3c3c3c;opacity:var(--op,.88);transform:rotate(var(--tilt,0deg));
+    transition:opacity .2s linear, transform .2s linear}
+  .r-pill .r-row{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+  .r-pill .r-stars{color:#FBBC04;font-size:12px;letter-spacing:1px}
+  .r-pill .r-name{font-size:10px;color:#8a8a8a;font-weight:700;text-transform:uppercase;letter-spacing:.03em}
+  .r-pill.stat{display:flex;align-items:center;gap:7px;font-weight:800;font-size:12.5px;
+    letter-spacing:.02em;color:#202124;background:rgba(255,255,255,.9);
+    box-shadow:0 1px 2px rgba(0,0,0,.28),0 8px 22px rgba(0,0,0,.24);white-space:nowrap}
+  .r-pill.stat .stars{color:#FBBC04;letter-spacing:.04em;font-size:13px}
+  .r-pill.stat .g-icon{font-family:"Archivo",sans-serif;font-weight:800;font-size:13px}
+  .r-pill.stat .g-icon span:nth-child(1){color:#4285F4}
+  .r-pill.stat .g-icon span:nth-child(2){color:#EA4335}
+  .r-pill.stat .g-icon span:nth-child(3){color:#FBBC04}
+  .r-pill.stat .g-icon span:nth-child(4){color:#4285F4}
+  .r-pill.stat .g-icon span:nth-child(5){color:#34A853}
+  .r-pill.stat .g-icon span:nth-child(6){color:#EA4335}
+  @media(prefers-reduced-motion:reduce){ .r-pill{transition:none} }
+  @media (max-width:1024px){ .review-pills{display:none} }
+
+  /* ---- hero pills on mobile — the hero keeps 4 pills on small screens too, but
+     pinned to four fixed corners (not the desktop per-load jitter) so they never
+     drift onto the headline, and with higher opacity + bolder, more varied tilts
+     than the desktop ones. !important is required here because the positions/tilt
+     are otherwise set inline (by the randomise script and the hand-placed desktop
+     values) — only an !important rule in the stylesheet can out-rank an inline
+     style. ░░ EDIT: mobile hero pill corners/tilt/opacity below ░░ */
+  @media (max-width:1024px){
+    .hero .review-pills{display:block !important}
+    .hero .review-pills .r-pill{opacity:.95 !important}
+  }
+  @media (max-width:1024px){
+    /* mobile/tablet hero: two pills sit beside the headline (small + translucent so
+       they never fight the letters even if they brush against one), two more sit in
+       the open band below the CTA buttons/scroll cue. Headline/eyebrow/lede get a
+       stronger text-shadow (below) as extra insurance for legibility. Matches the
+       same max-width:1024px cutoff used everywhere else on the site to mean
+       "mobile/tablet", so there's no gap width where pills sit at desktop spots. */
+    .hero .review-pills .r-pill{opacity:.45 !important;max-width:170px !important}
+    .hero .eyebrow,.hero .hero-loc,.hero h1,.hero .lede{text-shadow:0 0 4px rgba(26,26,28,.95), 0 1px 4px rgba(26,26,28,.95), 0 2px 18px rgba(26,26,28,.9) !important}
+  }
+
+  /* ---- Find Us pills on mobile/tablet — only the first 2 show (the rest stay
+     hidden), shrunk down, anchored into the two genuinely empty boxes: one beside
+     "Hours" (above the Monday row), one beside the address block. The randomise
+     script below (not this CSS) nudges them with a small jitter + random tilt
+     within those boxes, same mechanism as every other pill on the page. */
+  @media (max-width:1024px){
+    #findus .review-pills{display:block !important}
+    #findus .review-pills .r-pill:nth-of-type(n+3){display:none !important}
+  }
+  @media (max-width:560px){
+    #findus .review-pills .r-pill{max-width:128px !important;padding:7px 9px !important;font-size:10px !important;line-height:1.3 !important}
+    #findus .review-pills .r-pill .r-stars{font-size:9.5px !important}
+    #findus .review-pills .r-pill .r-name{font-size:8px !important}
+  }
+
+  /* ---- mobile rating line — replaces the floating pills on small screens ---- */
+  .mobile-rating{display:none;margin-top:28px;font-family:"Archivo",sans-serif;font-weight:700;
+    font-size:13px;letter-spacing:.04em;color:var(--smoke)}
+  .mobile-rating .stars{color:var(--gold);margin-right:6px}
+  @media (max-width:1024px){ .mobile-rating{display:block} }
+
   .hero-inner{position:relative;z-index:3;width:100%;padding-top:54px}
   /* ░░ TUNE: title — base headline size (clamp). The two lines scale off this:
         .t-top ("be kind") is bigger · .t-bot ("barbers.") is smaller ░░ */
@@ -318,7 +411,7 @@
   @media (max-width:760px){.barber{grid-template-columns:1fr;gap:32px}.barber-photo{max-width:420px}}
 
   /* ---- footer ---- */
-  footer{border-top:1px solid var(--line);padding:48px 0 60px;color:var(--smoke)}
+  footer{position:relative;border-top:1px solid var(--line);padding:48px 0 60px;color:var(--smoke)}
   .foot{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:flex-end}
   .foot .brand{font-size:16px}
   .foot a:hover{color:var(--accent)}
@@ -362,13 +455,20 @@
   }
 </style>
 </head>
-<body>
+<body class="has-banner">
+
+<!-- EDIT: closure banner — Khemchik's closure dates. Delete this whole <div> (and the
+     "has-banner" class on <body> above) once the shop reopens. -->
+<div class="closure-banner" id="closureBanner">
+  <strong>We will be closed 22 October until the 2nd November</strong> — thanks for your patience!
+</div>
 
 <!-- EDIT: name -->
 <header id="hdr">
-  <!-- EDIT: name / logo — client's real eternal-knot mark (assets/be-kind-knot.jpg) -->
+  <!-- EDIT: name / logo — client's real eternal-knot mark (pre-baked transparent PNG,
+       assets/be-kind-knot.png, so it shows correctly even opened from disk via file://) -->
   <a class="logo" href="#top" aria-label="Be Kind Barbers — home">
-    <img class="logo-knot" src="assets/be-kind-knot.jpg" alt="" aria-hidden="true">
+    <img class="logo-knot" src="assets/be-kind-knot.png" alt="" aria-hidden="true">
     <span class="logo-mark"><span class="l1">Be Kind</span><span class="l2">Barbers</span></span>
   </a>
   <a class="book-btn" href="https://timetobook.co.nz/book/be-kind-barbers" aria-label="Book an appointment">
@@ -380,6 +480,15 @@
 <section class="hero">
   <canvas id="scene" aria-hidden="true"></canvas>
   <div class="hero-grad"></div>
+  <!-- EDIT: reviews — pulled from Google (bekindbarbers, Te Aro). Swap quotes or
+       reposition in "TUNE: review pills" CSS above. Decorative + duplicated in the
+       mobile rating line below, so hidden from assistive tech. -->
+  <div class="review-pills" aria-hidden="true">
+    <div class="r-pill" style="top:20%;right:9%;--tilt:-2deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Aidan</span></span>“Great cut every time. The time and detail that goes in to it is unmatched.”</div>
+    <div class="r-pill" style="top:42%;right:21%;--tilt:3deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Andrew</span></span>“Took his time to understand exactly what I wanted and gave great advice on styling.”</div>
+    <div class="r-pill" style="top:63%;right:6%;--tilt:-3deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Dan</span></span>“Always gives me a perfect cut — wouldn't go to anyone else.”</div>
+    <div class="r-pill" style="top:82%;right:17%;--tilt:2.5deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Max</span></span>“Always a great chat and cut :)”</div>
+  </div>
   <div class="hero-inner">
     <div class="wrap">
       <!-- EDIT: copy -->
@@ -387,7 +496,7 @@
       <!-- EDIT: location slogan -->
       <p class="hero-loc">On the side of 30 Taranaki Street.</p>
       <h1 class="display"><span class="t-top">be kind</span><span class="t-bot"><span class="accent">barbers</span>.</span></h1>
-      <p class="lede"><em>Transformation</em> begins, with the next cut.</p>
+      <p class="lede"><em>Transformation</em> begins with the next cut.</p>
       <div class="hero-cta">
         <!-- focal CTA: see "TUNE: book btn" to resize -->
         <div class="cta-pair">
@@ -396,6 +505,7 @@
         </div>
         <a class="book-ghost" data-scroll="#barber" href="#barber">Meet your barber</a>
       </div>
+      <p class="mobile-rating"><span class="stars">★★★★★</span>5.0 · 85 Google reviews</p>
       <div class="scrollcue"><span class="ln"></span><span class="scroll-arrow">↓</span></div>
     </div>
   </div>
@@ -462,7 +572,13 @@
 </section>
 
 <!-- hours + location -->
-<section class="band">
+<section class="band" id="findus">
+  <div class="review-pills" aria-hidden="true">
+    <div class="r-pill" style="top:0%;right:26%;--tilt:-2.5deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Lewis</span></span>“Great haircut, great chat, 10/10.”</div>
+    <div class="r-pill" style="top:24%;right:8%;--tilt:3deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Rafi</span></span>“My favorite barber — always leave with a nice trim and a good story.”</div>
+    <div class="r-pill" style="top:48%;right:0%;--tilt:2.5deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Lachy</span></span>“Quality service, very accommodating to walk-ins.”</div>
+    <div class="r-pill" style="top:72%;right:22%;--tilt:-2deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Marc</span></span>“Super friendly, easy to chat to, and genuinely great at what he does.”</div>
+  </div>
   <div class="wrap">
     <div class="sec-head reveal">
       <h2 class="display">Find Us</h2>
@@ -518,6 +634,12 @@
 
 <!-- meet the barber -->
 <section class="band" id="barber">
+  <div class="review-pills" aria-hidden="true">
+    <div class="r-pill" style="top:0%;right:48%;--tilt:-2deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Emma</span></span>“Fantastic barber, super friendly — awesome experience every time.”</div>
+    <div class="r-pill" style="top:10%;right:4%;--tilt:3deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Benjamin</span></span>“Never looked back — great chats and even better cuts.”</div>
+    <div class="r-pill" style="top:20%;right:24%;--tilt:-3deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Jack</span></span>“Very good, been going here for a while. Solid chats.”</div>
+    <div class="r-pill" style="top:80%;right:8%;--tilt:2deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">S-H</span></span>“Awesome knowledgeable barber. Would recommend :)”</div>
+  </div>
   <div class="wrap">
     <div class="sec-head reveal">
       <h2 class="display">The team</h2>
@@ -683,6 +805,17 @@
 })();
 </script>
 
+<!-- sizes the header/hero offset to the banner's real (possibly wrapped) height -->
+<script>
+(function(){
+  var b = document.getElementById('closureBanner');
+  if(!b) return;
+  function setH(){ document.documentElement.style.setProperty('--banner-h', b.offsetHeight + 'px'); }
+  setH();
+  window.addEventListener('resize', setH);
+})();
+</script>
+
 <!-- Three.js (CDN). If it fails, the CSS gradient hero stands in. -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -739,6 +872,194 @@
     entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target);} });
   }, {threshold:.10});
   document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+  /* ---------- review pill drift ---------- a continuous, scroll-tied effect (not a
+     one-off reveal): each pill's opacity and a small vertical drift are recomputed
+     on every scroll frame from how far its centre sits from the viewport's centre,
+     so they stay live the whole time you're on the page — including during the
+     smooth-scroll button clicks above, since those also fire native scroll events —
+     rather than animating in once and then sitting static. ░░ TUNE: DRIFT_PX /
+     FADE_STRENGTH below to make the effect more or less noticeable ░░ */
+  (function(){
+    var pills = document.querySelectorAll('.r-pill');
+    if(!pills.length) return;
+
+    /* the full pool of real Google reviews the client sent across several rounds of
+       screenshots (see REVIEWS.md at the project root for the sourced list), trimmed
+       to short pill-sized quotes, first names only. One is assigned to every pill
+       slot at random on each page load, so the set of reviews showing (not just
+       their position) is different every visit — there are far more reviews here
+       than there are pill slots on the page, so a reload rarely repeats the same mix.
+       ░░ EDIT: reviews — add/edit/remove entries here to change the pool ░░ */
+    var REVIEW_POOL = [
+      {name:'Andrew', quote:'Took his time to understand exactly what I wanted and gave great advice on styling.'},
+      {name:'Dan', quote:'Always gives me a perfect cut — wouldn’t go to anyone else.'},
+      {name:'Mike', quote:'Great personality, never left dissatisfied — always recommend!'},
+      {name:'Maksim', quote:'The cleanest cut I’ve probably gotten in a while.'},
+      {name:'RV', quote:'So hospitable, cooperative, and very welcoming.'},
+      {name:'Lukas', quote:'Never disappointed — great service.'},
+      {name:'Daniil', quote:'Consistently nailed my haircuts — genuinely kind and easy to talk to.'},
+      {name:'Jordan', quote:'The level of care and attention he gives is unmatched.'},
+      {name:'Liam', quote:'Reliable and friendly, every single time.'},
+      {name:'Jack', quote:'Very good, been going here for a while. Solid chats.'},
+      {name:'S-H', quote:'Awesome knowledgeable barber. Would recommend :)'},
+      {name:'David C', quote:'Awesome service and careful, great cuts. Highly recommend.'},
+      {name:'Lewis', quote:'Great haircut, great chat, 10/10.'},
+      {name:'Blake', quote:'Very talented, consistent, and an awesome dude.'},
+      {name:'Rafi', quote:'My favorite barber — always leave with a nice trim and a good story.'},
+      {name:'Marc F', quote:'Great shop, always does a great cut.'},
+      {name:'Lachy', quote:'Quality service, very accommodating to walk-ins.'},
+      {name:'Aidan', quote:'Great cut every time. The time and detail that goes in to it is unmatched.'},
+      {name:'Tobias', quote:'Sharp, clean cut and really took the time to understand what I wanted.'},
+      {name:'Max B', quote:'Always a great chat and cut :)'},
+      {name:'Lowell', quote:'Not rushed, took the time to get my input and check in and chat.'},
+      {name:'Marc G', quote:'Super friendly, easy to chat to, and genuinely great at what he does.'},
+      {name:'Rens', quote:'He listens and makes every visit a comfortable experience.'},
+      {name:'Rory', quote:'Great service — fixed an absolutely butchered haircut I received.'},
+      {name:'Phil', quote:'Hard to find a decent barber — the best I’ve found in years.'},
+      {name:'Dylan J', quote:'Spends the time to perfect the cut, focusing on the small details.'},
+      {name:'Emma', quote:'Fantastic barber, super friendly — awesome experience every time.'},
+      {name:'Ollie', quote:'Easy to book, relaxed chats, stress-free every time.'},
+      {name:'Cameron', quote:'Understands what I want, listens, is friendly and respectful.'},
+      {name:'Nicholas', quote:'Always provides an excellent cut with attention and focus to detail.'},
+      {name:'Benjamin', quote:'Never looked back — great chats and even better cuts.'},
+      {name:'Noah', quote:'Very social and nice — a very good haircut.'},
+      {name:'Vince', quote:'Tidy work and great conversation.'},
+      {name:'Dylan W', quote:'Great haircuts, quiet atmosphere and great conversation.'},
+      {name:'Jimmy', quote:'Super friendly barber and affordable service!'},
+      {name:'Ivan', quote:'Awesome to see Khemchik opened his own shop!'},
+      {name:'Max E', quote:'Never had a bad haircut from here. Great place and great owner.'},
+      {name:'William', quote:'Give this man your money — everyone will say your haircut looks good.'},
+      {name:'Casey', quote:'The best barber in Wellington.'},
+      {name:'Francis', quote:'Always super friendly, and does the best cuts.'},
+      {name:'Luka', quote:'Nails it every single time — refuse to go anywhere else.'},
+      {name:'Thiven', quote:'Best in the business.'},
+      {name:'Dmitrii', quote:'Everything just clicked from the first visit.'},
+      {name:'Dylan Jn', quote:'Great haircuts, great chats. Always a good vibe!'},
+      {name:'Alexander', quote:'Takes his time and doesn’t rush. Always friendly.'},
+      {name:'David H', quote:'My best ever hairdresser. Good conversation, great haircut!'},
+      {name:'Tommaso', quote:'He does good haircuts and is always good for a chat.'},
+      {name:'Mathew', quote:'If you want a good haircut and a good chat, he’s your guy.'},
+      {name:'Shopos', quote:'Amazing guy, haircut is mint, definitely recommend!'},
+      {name:'Ethan', quote:'Great haircut! Highly recommend Khemchik!'},
+      {name:'Sergey', quote:'Great barber, highly recommend!'}
+    ];
+    (function assignRandomReviews(){
+      var slots = document.querySelectorAll('.r-pill:not(.stat)');
+      if(!slots.length) return;
+      var pool = REVIEW_POOL.slice();
+      for(var i = pool.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+      }
+      slots.forEach(function(el, idx){
+        var review = pool[idx % pool.length];
+        var row = el.querySelector('.r-row');
+        var nameEl = row && row.querySelector('.r-name');
+        if(nameEl) nameEl.textContent = review.name;
+        for(var k = 0; k < el.childNodes.length; k++){
+          var n = el.childNodes[k];
+          if(n.nodeType === 3 && n.textContent.trim().length > 0){
+            n.textContent = '“' + review.quote + '”';
+          }
+        }
+      });
+    })();
+
+    /* randomise each pill's spread a little on every page load/visit, so the layout
+       isn't identical every time — small jitter around its curated spot (each spot
+       was hand-placed in the HTML to sit in genuinely empty space for that section,
+       never over text or photos). Jitter stays small enough that it can't jitter
+       its way onto real content. Tilt is re-randomised too. */
+    (function randomiseSpread(){
+      var JITTER_PCT = 4;    // max % offset applied to top/left/right/bottom
+      var TILT_RANGE = 4;    // random tilt within ±deg
+
+      // on mobile/tablet, Find Us only shows its first 2 pills (see CSS), re-anchored
+      // into the two genuinely empty boxes there (beside "Hours" and beside the
+      // address block) — a small jitter + random tilt is then applied below, same
+      // as every other pill, so they still move a little without leaving the box.
+      if(window.innerWidth <= 1024){
+        var findusPills = document.querySelectorAll('#findus .review-pills .r-pill');
+        var mobileAnchors = [
+          {top: 9, left: 46, right: '', bottom: ''},
+          {top: 72, left: 54, right: '', bottom: ''}
+        ];
+        findusPills.forEach(function(el, i){
+          if(i > 1 || !mobileAnchors[i]) return;
+          var a = mobileAnchors[i];
+          el.style.top = a.top + '%';
+          el.style.left = a.left + '%';
+          el.style.right = '';
+          el.style.bottom = '';
+        });
+
+        // hero: same idea — re-anchor the 4 pills beside the headline (top pair)
+        // and below the scroll cue (bottom pair), then let the jitter below nudge
+        // each one a little so the tilt/position isn't identical every visit.
+        var heroPills = document.querySelectorAll('.hero .review-pills .r-pill');
+        var heroAnchors = [
+          {top: 31, left: 1},
+          {top: 31, right: 1},
+          {bottom: 3, left: 2},
+          {bottom: 3, right: 2}
+        ];
+        heroPills.forEach(function(el, i){
+          var a = heroAnchors[i];
+          if(!a) return;
+          el.style.top = a.top !== undefined ? a.top + '%' : '';
+          el.style.bottom = a.bottom !== undefined ? a.bottom + '%' : '';
+          el.style.left = a.left !== undefined ? a.left + '%' : '';
+          el.style.right = a.right !== undefined ? a.right + '%' : '';
+        });
+      }
+
+      pills.forEach(function(el){
+        ['top', 'left', 'right', 'bottom'].forEach(function(prop){
+          var cur = el.style[prop];
+          if(!cur) return;
+          var val = parseFloat(cur);
+          if(isNaN(val)) return;
+          var jitter = (Math.random() * 2 - 1) * JITTER_PCT;
+          var next = Math.max(2, Math.min(90, val + jitter));
+          el.style[prop] = next.toFixed(1) + '%';
+        });
+        var tilt = (Math.random() * 2 - 1) * TILT_RANGE;
+        el.style.setProperty('--tilt', tilt.toFixed(1) + 'deg');
+      });
+    })();
+
+    var DRIFT_PX = 26;         // max px of vertical parallax drift at the viewport edge
+    var FADE_STRENGTH = .34;   // how much extra opacity is lost at the viewport edge
+    var STICK_CURVE = 2.4;     // >1 = flat/"stuck" near centre, accelerating out toward the edges
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var ticking = false;
+    function update(){
+      ticking = false;
+      var vh = window.innerHeight;
+      pills.forEach(function(el){
+        var r = el.getBoundingClientRect();
+        if(r.bottom < -200 || r.top > vh + 200) return;   // skip far-offscreen pills
+        var norm = ((r.top + r.height/2) - vh/2) / (vh/2);   // -1 top … 0 centre … 1 bottom
+        var clamped = Math.max(-1.3, Math.min(1.3, norm));
+        // ease the raw scroll distance so the pill barely moves/fades near the
+        // viewport's centre (feels "stuck" to that section) then speeds up the
+        // further a section is scrolled past, instead of a constant linear slide
+        var curved = Math.sign(clamped) * Math.pow(Math.abs(clamped), STICK_CURVE);
+        var baseOp = parseFloat(getComputedStyle(el).getPropertyValue('--op')) || .88;
+        var op = Math.max(.12, baseOp - Math.abs(curved) * FADE_STRENGTH);
+        el.style.opacity = op.toFixed(2);
+        if(!reduce){
+          var drift = (curved * DRIFT_PX).toFixed(1);
+          el.style.transform = 'translateY(' + drift + 'px) rotate(var(--tilt,0deg))';
+        }
+      });
+    }
+    function onScroll(){ if(!ticking){ ticking = true; requestAnimationFrame(update); } }
+    window.addEventListener('scroll', onScroll, {passive:true});
+    window.addEventListener('resize', onScroll);
+    update();
+  })();
 
   /* ---------- 3D barber pole hero ---------- */
   var canvas = document.getElementById('scene');

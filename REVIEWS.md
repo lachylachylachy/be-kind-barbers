@@ -1,0 +1,114 @@
+# Google reviews — reference list
+
+Source: Be Kind Barbers Google Business listing (5.0★, 85 reviews, Te Aro, Wellington).
+Pulled from screenshots the client sent across several sessions. Kept here so future
+review-pill additions don't need to re-scrape the listing. First names only (no
+surnames) when used on the site, per client instruction.
+
+Reviews already used as pills on the site are marked ✅.
+
+- ✅ Andrew (Anh Vu Vo) — "Really happy with my haircut here! Khemchik took his time to understand exactly what I wanted and gave great advice on styling. I'll definitely be back."
+- ✅ Dan (Dan Forrest) — "Khemchik has been my barber for about 2 years now and always gives me a perfect cut, wouldn't go to anyone else. Good chats as well, highly recommend."
+- Mike Murray — "Khemchik has been my go-to barber for maybe 2 years now, and I've happily followed as he's moved to set up his own location. Great personality and I've never left dissatisfied, always recommend!"
+- ✅ Maksim (Maksim Tulenkov) — "The cleanest cut I have probably gotten in a while. Barber's skills are fabulous, couldn't expect less. Will certainly comeback next time! Absolutely recommended!"
+- RV Quijano — "Khemchik is such an amazing barber — so hospitable, cooperative, and very welcoming. He takes great care of you + your hair and makes sure you get the results you want."
+- Lukas oakely — "This is the only place I will get my hair done, Khemchik and his team have been cutting my hair for years and I have never been disappointed. Great service."
+- Daniil Lathourakis — "Khemchik has been my barber for coming up to three years now, he has consistently nailed my haircuts every single time… His care, and attention to detail to actually giving you the hair cut you asked for is unmatched. As well as being a genuinely kind, and easy to talk to person."
+- Jordan Dawson — "Khemchik has been my barber for almost three years now and I have followed him to each place he has been cutting hair. The level of care and attention he gives clients was not something I was willing to give up. I would highly recommend booking him for a cut!"
+- ✅ (unattributed quote used — "The cleanest cut I've probably gotten in a while") — Maksim Tulenkov, see above
+- ✅ Liam (Liam Collins) — "Khemchik always does a great job. Reliable and friendly."
+- Jack Boggs — "Very good, been going here for a while. Solid chats."
+- S-H Won — "Awesome knowledgeable barber. Would recommend :)"
+- David Carter — "Awesome service and careful, great cuts. Highly recommend."
+- ✅ Lewis (Lewis Walker-Pearce) — "Great haircut, great chat, 10/10."
+- Blake Shepherd — "Very talented, consistent 🙏 and is an awesome dude"
+- Anh Vu Vo — see Andrew above
+- ✅ Rafi — "My favorite barber, always leave with a nice trim and a good story or two"
+- Marc Freeman — "Great shop. Khemchik has always done a great cut. My hair is pretty thick and wavy and he knows how to tame that sh*t." (avoid — informal language)
+- ✅ Lachy (Lachy Beasley — client's own review) — "Quality service, would highly recommend. Very accommodating to walk-ins. Thankyou Khemchik"
+- Aidan woodward — "Great cut every time. The time and detail that goes in to it is unmatched"
+- Tobias Ha — "Had great experience at Be Kind Barbers. Khemchik always gave me a sharp, clean cut and really took the time to understand what I wanted. Friendly service, a welcoming atmosphere, and a spotless shop. Highly recommend, and I'll be back!"
+- Max Biddiscombe — "Always a great chat and cut :)"
+- Lowell Meyer — "Got my last two haircuts here; I'll be coming back in the future. Great cut, not rushed, took the time to get my input and check in and chat, but also very laid back and chill."
+- Marc Gullett — "Super friendly, easy to chat to, and genuinely great at what he does. Always walk out stoked with my haircut, and he's especially good with beards too. Would definitely recommend!" ✅ used as "Marc"
+- Rens — "Khemchik is a great barber. He listens and he knows more than just one kind if haircut. Makes every visit a comfortable experience. You feel fresh leaving the shop."
+- Rory Greer — "Great service - fixed an absolutely butchered haircut I received. Definitely worth coming"
+- Phil L — "Hard to find a decent barber in Wellington. The best one i've found in years. Really detailed haircuts and listens well. Thank you."
+- Luke Harris — "Highly recomend! Best barber in town, always a great cut and top notch service!"
+- Tommy Soria Romero — "Very good haircut 👍👍"
+- bradley christison — "Always a great experience! Attention to detail on point."
+- Logan Watson — "Great barber, great haircuts"
+- Rafi — see above
+- Marc Freeman — see above
+- Aidan woodward — see above
+- Tobias Ha — see above
+- Max Biddiscombe — see above
+- Lowell Meyer — see above
+- Marc Gullett — see above
+- Sergey Shilovskiy — "Great barber, highly recommend! Thanks Khemchik"
+- ✅ Dylan (Dylan James) — "You know you've found a good barber when they actually spend the time to perfect the cut, constantly inspecting their work from all angles and focusing on the small details. I've tried a couple different barbers around Wellington and Khemchik is the top choice! So happy he opened up his own shop now!"
+- Lachy Beasley — see above
+- ✅ Emma — "Khemchik is a fantastic barber and is super friendly, which makes for an awesome experience every time."
+- ✅ Ollie (Ollie Pegler) — "Haircuts are always great. It's super easy to book, and the conversations make the whole experience relaxed and enjoyable while you get a stress-free haircut. I would 100% recommend them to anyone looking for a trim."
+- Cameron Vartan — "lovely guy, understands what i want, listens, is friendly and overall respectful. great dude great haircut🙏"
+- Nicholas Sutton — "Khemchik was our barber when we first moved to Wellington when working at a different location. When we found out he was opening his own shop we were excited for him. He always provides an excellent cut with attention and focus to detail."
+- Emma — see above
+- Liam Collins — see above
+- Jack Boggs — see above
+- ✅ Benjamin — "I stumbled across Khemchik a few years ago and have never looked back. Great chats and even better cuts!"
+- Noah — "Khemchik did me a very good haircut and he is very social and nice"
+- Ollie Pegler — see above
+- Dylan James — see above
+- Mark/Marc Gullett — see above
+- Anh Vu Vo — see above
+- Dan Forrest — see above
+- Mike Murray — see above
+- Rafi — "My favorite barber, always leave with a nice trim and a good story or two" (new review, ~2 days old)
+- Marc Freeman — "Great shop. Khemchik has always done a great cut. My hair is pretty thick and wavy and he knows how to tame that..." (new review, ~6 days old)
+- Vince Buckley — "I've been a regular for about a year and I've loved their work, even following the barber from their previous shop. In short, they do tidy work and have great conversation!"
+- Dylan Williams — "Khemchik is awesome. Great haircuts, quiet atmosphere and great conversation. Would recommend."
+- cooper shields — "Fresh cut"
+- Jimmy Mack — "Super friendly barber and affordable service!"
+- Ivan Safonov — "Best barber in town, been getting my haircut done for a couple of years and awesome to see Khemchik opened his own shop!"
+- Max Ehrlich — "Never had a bad haircut from here. Great place and great owner."
+- William Turney — "Khemchik is the best barber in the world. Give this man your money if you want everyone at work to say your haircut looks good"
+- Casey Morton — "Khemchik is the best barber in Wellington"
+- george copeland — "Epic"
+- Shonn — "Always a good cut"
+- Francis Elworthy — "Been coming here for a few months. Khemchik is always super friendly, and does the best cuts. One of the best in Welly."
+- Luka Lees — "Nails it every single time. You'll walk out with exactly what you are after. Kemchik is welcoming, great chats and has been my barber the past year and I refuse to go anywhere else. High recommend"
+- thiven nadarajah — "Best in the Business"
+- Dmitrii Artemev — "Before I found Khemchik, I tried 3-4 other barbers who had been recommended to me, but I was never completely happy with the result. With Khemchik, everything just clicked from the first visit. I'm always happy with the haircut, and he's also great to chat with — there's always something interesting to talk about. The location is convenient, and online booking makes it really easy to schedule an appointment. Definitely recommend him. I only get my hair cut by Khemchik now!"
+- Dylan Johnston — "Great haircuts, great chats. Always a good vibe!"
+- Jjohn Nickle — "for more than 3 years now, i only trust khemchik to cut my hair. he knows what hairstyle suits you. his attention to details is unmatched! one of the best for sure. also he is easy to talk to and a funny guy. thanks for making me look handsome always my friend"
+- Alexander Reid — "Very good at his job, takes his time and doesn't rush. Always friendly and up for a chat."
+- David Hay — "My best ever hairdresser. Good conversation, great haircut!"
+- Tommaso Pini — "Khemchik is a great barber, and an even better guy! He does good haircuts and is always good for a chat - I have been a client of his for quite some time, and he never disappoints. He has just opened his own shop - couldn't recommend it enough, go check it out!"
+- Mathew scott — "If you want a good haircut and a good chat Khemchik is your guy"
+- Thomas — "Khemchik always leaves me with less hair than I started with" (avoid — reads as a complaint even though it's a joke)
+- Shopos Lyrr — "Amazing guy, haircut is mint, definitely recommend !"
+- Ethan ten Broeke-Smith — "Great haircut! Highly recommend Khemchik!"
+- Bradford Weekly — "Khemchik is more than a great barber (but that he is!); he is a sounding board, he is a wise person who will interact with you during your visit in the manner which suits you. He's a good conversationalist. I started with Khemchik at a different shop, and when he opened Be Kind Barbers I followed happily. Am glad I did."
+
+## Candidates for the next batch of pills (short, punchy, unused)
+- Mike Murray — "Great personality and I've never left dissatisfied, always recommend!"
+- Jack Boggs — "Very good, been going here for a while. Solid chats."
+- S-H Won — "Awesome knowledgeable barber. Would recommend :)"
+- David Carter — "Awesome service and careful, great cuts. Highly recommend."
+- Blake Shepherd — "Very talented, consistent, and an awesome dude"
+- Aidan woodward — "Great cut every time. The time and detail that goes in to it is unmatched"
+- Max Biddiscombe — "Always a great chat and cut :)"
+- Sergey — "Great barber, highly recommend! Thanks Khemchik"
+- Cameron — "Lovely guy, understands what I want, listens, is friendly and overall respectful. Great dude, great haircut."
+- Noah — "Khemchik did me a very good haircut and he is very social and nice"
+- Dylan Williams — "Khemchik is awesome. Great haircuts, quiet atmosphere and great conversation."
+- Jimmy Mack — "Super friendly barber and affordable service!"
+- Ivan — "Best barber in town, awesome to see Khemchik opened his own shop!"
+- Francis — "Always super friendly, and does the best cuts. One of the best in Welly."
+- Luka — "Nails it every single time — welcoming, great chats, refuse to go anywhere else."
+- Dylan Johnston — "Great haircuts, great chats. Always a good vibe!"
+- Alexander Reid — "Very good at his job, takes his time and doesn't rush. Always friendly and up for a chat."
+- David Hay — "My best ever hairdresser. Good conversation, great haircut!"
+- Mathew — "If you want a good haircut and a good chat, Khemchik is your guy"
+- Shopos — "Amazing guy, haircut is mint, definitely recommend!"
+- Ethan — "Great haircut! Highly recommend Khemchik!"
