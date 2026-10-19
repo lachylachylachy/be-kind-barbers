@@ -206,17 +206,20 @@
      are otherwise set inline (by the randomise script and the hand-placed desktop
      values) — only an !important rule in the stylesheet can out-rank an inline
      style. ░░ EDIT: mobile hero pill corners/tilt/opacity below ░░ */
+  /* hero pills 5 & 6 are mobile/tablet-only extras — hidden on desktop */
+  .hero .review-pills .r-pill:nth-of-type(n+5){display:none}
   @media (max-width:1024px){
     .hero .review-pills{display:block !important}
     .hero .review-pills .r-pill{opacity:.95 !important}
+    .hero .review-pills .r-pill:nth-of-type(n+5){display:block !important}
   }
   @media (max-width:1024px){
-    /* mobile/tablet hero: two pills sit beside the headline (small + translucent so
-       they never fight the letters even if they brush against one), two more sit in
-       the open band below the CTA buttons/scroll cue. Headline/eyebrow/lede get a
-       stronger text-shadow (below) as extra insurance for legibility. Matches the
-       same max-width:1024px cutoff used everywhere else on the site to mean
-       "mobile/tablet", so there's no gap width where pills sit at desktop spots. */
+    /* mobile/tablet hero: three pairs stacked top-to-bottom — beside the headline,
+       just underneath that pair, and below the CTA buttons/scroll cue. Small +
+       translucent so they never fight the letters even where they brush against
+       one. Headline/eyebrow/lede get a stronger text-shadow (below) as extra
+       insurance for legibility. Matches the same max-width:1024px cutoff used
+       everywhere else on the site to mean "mobile/tablet". */
     .hero .review-pills .r-pill{opacity:.45 !important;max-width:98px !important;padding:5px 7px !important;font-size:7.5px !important;line-height:1.2 !important}
     .hero .review-pills .r-pill .r-stars{font-size:7px !important}
     .hero .review-pills .r-pill .r-name{font-size:6px !important}
@@ -233,7 +236,10 @@
   .mobile-rating{display:none;margin-top:28px;font-family:"Archivo",sans-serif;font-weight:700;
     font-size:13px;letter-spacing:.04em;color:var(--smoke)}
   .mobile-rating .stars{color:var(--gold);margin-right:6px}
-  @media (max-width:1024px){ .mobile-rating{display:block} }
+  @media (max-width:1024px){
+    .mobile-rating{display:block;color:var(--bone);
+      text-shadow:0 0 4px rgba(26,26,28,.95), 0 1px 4px rgba(26,26,28,.95), 0 2px 18px rgba(26,26,28,.9)}
+  }
 
   .hero-inner{position:relative;z-index:3;width:100%;padding-top:54px}
   /* ░░ TUNE: title — base headline size (clamp). The two lines scale off this:
@@ -481,6 +487,9 @@
     <div class="r-pill" style="top:42%;right:21%;--tilt:3deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Andrew</span></span>“Took his time to understand exactly what I wanted and gave great advice on styling.”</div>
     <div class="r-pill" style="top:63%;right:6%;--tilt:-3deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Dan</span></span>“Always gives me a perfect cut — wouldn't go to anyone else.”</div>
     <div class="r-pill" style="top:82%;right:17%;--tilt:2.5deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Max</span></span>“Always a great chat and cut :)”</div>
+    <!-- mobile/tablet-only extra pair, hidden on desktop (see "TUNE: mobile hero pill" CSS) -->
+    <div class="r-pill" style="top:50%;right:9%;--tilt:-3deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Extra1</span></span>“placeholder”</div>
+    <div class="r-pill" style="top:50%;right:21%;--tilt:4deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Extra2</span></span>“placeholder”</div>
   </div>
   <div class="hero-inner">
     <div class="wrap">
@@ -987,15 +996,19 @@
           el.style.bottom = '';
         });
 
-        // hero: same idea — re-anchor the 4 pills beside the headline (top pair)
-        // and below the scroll cue (bottom pair), then let the jitter below nudge
-        // each one a little so the tilt/position isn't identical every visit.
+        // hero: same idea — re-anchor the 6 pills into three stacked rows (beside
+        // the headline, just underneath that pair, and below the scroll cue), then
+        // let the jitter below nudge each one a little so the tilt/position isn't
+        // identical every visit. Rows are spaced well apart so jitter can't make
+        // adjacent rows collide.
         var heroPills = document.querySelectorAll('.hero .review-pills .r-pill');
         var heroAnchors = [
-          {top: 31, left: 1},
-          {top: 31, right: 1},
-          {bottom: 3, left: 2},
-          {bottom: 3, right: 2}
+          {top: 26, left: 1},   // top row (beside headline)
+          {top: 26, right: 1},
+          {bottom: 9, left: 2}, // bottom row (below scroll cue)
+          {bottom: 9, right: 2},
+          {top: 46, left: 3},   // middle row (just under the top pair)
+          {top: 46, right: 3}
         ];
         heroPills.forEach(function(el, i){
           var a = heroAnchors[i];
