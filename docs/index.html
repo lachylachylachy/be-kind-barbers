@@ -217,23 +217,16 @@
        stronger text-shadow (below) as extra insurance for legibility. Matches the
        same max-width:1024px cutoff used everywhere else on the site to mean
        "mobile/tablet", so there's no gap width where pills sit at desktop spots. */
-    .hero .review-pills .r-pill{opacity:.45 !important;max-width:170px !important}
+    .hero .review-pills .r-pill{opacity:.45 !important;max-width:98px !important;padding:5px 7px !important;font-size:7.5px !important;line-height:1.2 !important}
+    .hero .review-pills .r-pill .r-stars{font-size:7px !important}
+    .hero .review-pills .r-pill .r-name{font-size:6px !important}
     .hero .eyebrow,.hero .hero-loc,.hero h1,.hero .lede{text-shadow:0 0 4px rgba(26,26,28,.95), 0 1px 4px rgba(26,26,28,.95), 0 2px 18px rgba(26,26,28,.9) !important}
   }
 
-  /* ---- Find Us pills on mobile/tablet — only the first 2 show (the rest stay
-     hidden), shrunk down, anchored into the two genuinely empty boxes: one beside
-     "Hours" (above the Monday row), one beside the address block. The randomise
-     script below (not this CSS) nudges them with a small jitter + random tilt
-     within those boxes, same mechanism as every other pill on the page. */
+  /* ---- Find Us pills — mobile/tablet only: hidden entirely (desktop keeps its
+     half-circle of 4 pills around Location, untouched). */
   @media (max-width:1024px){
-    #findus .review-pills{display:block !important}
-    #findus .review-pills .r-pill:nth-of-type(n+3){display:none !important}
-  }
-  @media (max-width:560px){
-    #findus .review-pills .r-pill{max-width:128px !important;padding:7px 9px !important;font-size:10px !important;line-height:1.3 !important}
-    #findus .review-pills .r-pill .r-stars{font-size:9.5px !important}
-    #findus .review-pills .r-pill .r-name{font-size:8px !important}
+    #findus .review-pills{display:none !important}
   }
 
   /* ---- mobile rating line — replaces the floating pills on small screens ---- */
