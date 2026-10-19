@@ -483,10 +483,10 @@
        reposition in "TUNE: review pills" CSS above. Decorative + duplicated in the
        mobile rating line below, so hidden from assistive tech. -->
   <div class="review-pills" aria-hidden="true">
-    <div class="r-pill" style="top:20%;right:9%;--tilt:-2deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Aidan</span></span>“Great cut every time. The time and detail that goes in to it is unmatched.”</div>
-    <div class="r-pill" style="top:42%;right:21%;--tilt:3deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Andrew</span></span>“Took his time to understand exactly what I wanted and gave great advice on styling.”</div>
-    <div class="r-pill" style="top:63%;right:6%;--tilt:-3deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Dan</span></span>“Always gives me a perfect cut — wouldn't go to anyone else.”</div>
-    <div class="r-pill" style="top:82%;right:17%;--tilt:2.5deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Max</span></span>“Always a great chat and cut :)”</div>
+    <div class="r-pill" style="top:24%;right:9%;--tilt:-2deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Aidan</span></span>“Great cut every time. The time and detail that goes in to it is unmatched.”</div>
+    <div class="r-pill" style="top:41%;right:21%;--tilt:3deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Andrew</span></span>“Took his time to understand exactly what I wanted and gave great advice on styling.”</div>
+    <div class="r-pill" style="top:60%;right:6%;--tilt:-3deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Dan</span></span>“Always gives me a perfect cut — wouldn't go to anyone else.”</div>
+    <div class="r-pill" style="top:78%;right:17%;--tilt:2.5deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Max</span></span>“Always a great chat and cut :)”</div>
     <!-- mobile/tablet-only extra pair, hidden on desktop (see "TUNE: mobile hero pill" CSS) -->
     <div class="r-pill" style="top:50%;right:9%;--tilt:-3deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Extra1</span></span>“placeholder”</div>
     <div class="r-pill" style="top:50%;right:21%;--tilt:4deg;--op:.88"><span class="r-row"><span class="r-stars">★★★★★</span><span class="r-name">Extra2</span></span>“placeholder”</div>
@@ -1003,12 +1003,12 @@
         // adjacent rows collide.
         var heroPills = document.querySelectorAll('.hero .review-pills .r-pill');
         var heroAnchors = [
-          {top: 26, left: 1},   // top row (beside headline)
-          {top: 26, right: 1},
+          {top: 30, left: 1},   // top row (beside headline)
+          {top: 30, right: 1},
           {bottom: 9, left: 2}, // bottom row (below scroll cue)
           {bottom: 9, right: 2},
-          {top: 46, left: 3},   // middle row (just under the top pair)
-          {top: 46, right: 3}
+          {top: 42, left: 3},   // middle row (just under the top pair)
+          {top: 42, right: 3}
         ];
         heroPills.forEach(function(el, i){
           var a = heroAnchors[i];
